@@ -1,0 +1,2274 @@
+{
+    "info": {
+        "description": "23.08. TESTING TESTING Testing The Management API is a secure REST API that provides read/write access to your Kentico Kontent projects.\n\n# Introduction\n\n\nUse the API to migrate your existing content into your Kentico Kontent project, or update content in unpublished content items. The API cannot be used on published content unless you create new versions of the content items first, either in UI or through the Management API.\n\nWhen retrieving and updating content via the Management API, you always work with the latest versions of content – the same as you would see in the Kentico Kontent user interface. Learn how to import content via the API by taking the tutorial on [Importing to Kentico Kontent](https://docs.kontent.ai/link-to/import_to_kontent).\n\nThe base URL for all requests is `https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>`.\n\nAll requests to the API must be made securely with HTTPS with [TLS 1.2](https://github.com/Kentico/delivery-sdk-net/wiki/Fixing-error:-Could-not-create-SSL-TLS-secure-channel \"A note on TLS 1.1 deprecation\") and [authenticated](#section/Authentication) with a valid API key. Requests to the API are [rate limited](https://docs.kontent.ai/link-to/rate_limiting_a8989eb) and uncached.\n\n<div class=\"callout callout--info\">\n\n<p><strong>API requests limits</strong></p>\n<p>The requests made to the Management API count towards the overall API calls limit set in our <a href=\"https://kontent.ai/pricing/fup\">Fair Use Policy</a>. For more information, see <a href=\"https://kontent.ai/pricing\">Pricing FAQ</a> on our Kentico Kontent&nbsp;website.</p>\n\n</div>\n\n<!--CodeSample programmingLanguage=cURL platform=REST-->\n\n\n```\ncurl --request GET \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'\n```\n\n<!--CodeSample-end-->\n\nThe Management API does not provide any content filtering options and is not optimized for content delivery. If you need to deliver larger amounts of content, filter it, and leverage content caching, we recommend using the [Delivery API](https://docs.kontent.ai/link-to/delivery_api) instead.\n\n# Authentication\n\n\nTo work with the Management API, send your requests over HTTPS and authenticate using the `Authorization` header in the following format: `Authorization: Bearer <YOUR_API_KEY>`.\n\nTo get your API key for the Management API, go to [Kentico Kontent](https://app.kontent.ai/) > Project settings > API keys. The API key provides access to a single Kentico Kontent project. You will need different API keys for each of your projects.\n\n# SDK\n\n\nWe offer a [.NET SDK](https://docs.kontent.ai/link-to/develop_apps__net) to help you work with the API. However, no SDK is required to use the API.\n\n# Guidelines on handling changes\n\n\nThe state of the Management API may change in the future, however, the majority won't be breaking changes. To help you create more robust scripts and integrations, we've prepared a list of general changes to the API that we don't consider breaking. We recommend you read through the list to ensure you don't rely on a state that might change in the future.\n\nIn general, the non-breaking changes include adding functionality or changes in order of the returned data. More specifically, the following are NOT breaking changes:\n* General:\n  * Add a new endpoint.\n  * Change the API behavior to fix a bug in the service.\n  * Change rate limitation.\n  * Change error message text.\n* Responses:\n  * Add a new property to JSON objects.\n  * Change the order of JSON object properties.\n  * Add a new type of element for content types or snippets.\n  * Add a new HTML element to [rich text elements](#section/Rich-text-element).\n  * Add a new attribute to HTML element in rich text elements.\n  * Add a new value to HTML element attribute in rich text elements.\n  * Change the order of HTML element attributes in rich text elements.\n  * Represent some characters as HTML entities.\n  * Add a new response header.\n  * Add a body to a request that contained none.\n* Requests:\n  * Add a new optional property to JSON objects.\n  * Add a new optional attribute to HTML element in rich text elements.\n  * Add a new value to the HTML element attribute in rich text elements.\n  * Add a new optional request header.\n  * Add a new optional query string parameter.\n  * Add an optional body to request that contained none.\n\n# Errors\n\n\nThe Management API returns standard HTTP status codes to indicate success or failure of a request. In general, status codes in the `2xx` range indicate a successful request, status codes in the `4xx` range indicate errors caused by an incorrect input (for example, providing incorrect API key), and status codes in the `5xx` range indicate an error on our side.\n\n## HTTP status codes summary\n\n\n<table>\n\n<tbody>\n\n<tr>\n\n<td>\n\n**HTTP status code**\n\n</td>\n\n<td>\n\n**Description**\n\n</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n`400` **Bad request**\n\n</td>\n\n<td>The request was not understood. Check your request for missing required parameters or invalid query parameter values.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n`401` **Unauthorized**\n\n</td>\n\n<td>The provided API key is invalid or missing.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n`403` **Forbidden**\n\n</td>\n\n<td>The provided API key is invalid for the requested project.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n`404` **Not found**\n\n</td>\n\n<td>The requested resource doesn't exist. Try checking the path for typos.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n`405` **Method not allowed**\n\n</td>\n\n<td>The requested HTTP method is not supported for the specified resource. Try performing a GET request.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n`409` **Conflict**\n\n</td>\n\n<td>The request could not be completed due to a conflict with the current state of the specified resource. For example, this may occur if a resource is modified via multiple requests at the same time.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n`429` **Too many requests**\n\n</td>\n\n<td>\n\nThe [rate limit](#tag/Rate-limiting) for the API has been exceeded. Try your request again after a few seconds.\n\n</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n`5xx` **Internal Error** or **Service Unavailable**\n\n</td>\n\n<td>Something went wrong on our side. Try your request again after a few seconds and use a retry policy.</td>\n\n</tr>\n\n</tbody>\n\n</table>\n\n## Resolving errors\n\n\nFor troubleshooting failed requests, the API provides error messages defined in a consumable format to help you identify and fix the issue.\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Error\" showReadOnly={true} showWriteOnly={true} /> \n\nIf you cannot identify and resolve an issue with your API call, you can contact us with the response status and the request ID you get in the error response.\n",
+        "title": "Management API v1 Preview",
+        "version": "1"
+    },
+    "openapi": "3.0.2",
+    "paths": {
+        "/{project_id}/items": {
+            "post": {
+                "description": "Create a new content item based on a specific content type. Content items do NOT contain any content themselves, but serve as wrappers for individual language variants.\n\nTo import content to a specific [language variant](https://docs.kontent.ai/link-to/language_variants_bbc6039) of a content item, you can [upsert a language variant](https://docs.kontent.ai/link-to/upsert_a_language_variant_0e7d242).\n\nIf you are importing content from a different system and want to use the same identifiers for your content as in the previous system, use the `external_id` property to set a custom identifier for the new content item.\n",
+                "operationId": "add-a-content-item",
+                "parameters": [{
+                    "$ref": "#/components/parameters/project_id"
+                }],
+                "summary": "Add a content item",
+                "tags": [
+                    "Content items"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContentItem"
+                            },
+                            "example": {
+                                "name": "My article",
+                                "codename": "my_article_2",
+                                "type": {
+                                    "codename": "article"
+                                },
+                                "external_id": "my-1337-article"
+                            }
+                        }
+                    },
+                    "description": "The content item to be added.\n",
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "The created content item object.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItem"
+                                },
+                                "example": {
+                                    "id": "335d17ac-b6ba-4c6a-ae31-23c1193215cb",
+                                    "name": "My article",
+                                    "codename": "my_article_2",
+                                    "type": {
+                                        "id": "b7aa4a53-d9b1-48cf-b7a6-ed0b182c4b89"
+                                    },
+                                    "sitemap_locations": [],
+                                    "external_id": "my-1337-article",
+                                    "last_modified": "2020-04-04T13:45:30.7692802Z"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The specified request body is invalid.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "e6368434-e500-48b4-9ffe-3cd3c0f53ac9",
+                                    "error_code": 0,
+                                    "message": "Provide ID of content item's content type."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nContentItemCreateModel item = new ContentItemCreateModel\n{\n    Name = \"On Roasts\",\n    Type = ContentTypeIdentifier.ByCodename(\"article\"),\n    SitemapLocations = new[] { SitemapNodeIdentifier.ByCodename(\"articles\") },\n    ExternalId = \"59713\"\n};\n\nContentItemModel responseItem = await client.CreateContentItemAsync(item);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request POST \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json' \\\n  --data '\n{\n  \"name\": \"On Roasts\",\n  \"codename\": \"my_article_my_article\",\n  \"type\": {\n    \"codename\": \"article\"\n  },\n  \"external_id\": \"59713\"\n}'"
+                    }
+                ]
+            },
+            "get": {
+                "description": "Retrieve a dynamically paginated list of content items.\n",
+                "operationId": "list-content-items",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/continuationtoken"
+                    }
+                ],
+                "summary": "List content items",
+                "tags": [
+                    "Content items"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A dynamically paginated list of content items.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "items",
+                                        "pagination"
+                                    ],
+                                    "properties": {
+                                        "items": {
+                                            "description": "A list of content items.\n",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ContentItem"
+                                            },
+                                            "uniqueItems": true,
+                                            "type": "array"
+                                        },
+                                        "pagination": {
+                                            "$ref": "#/components/schemas/Pagination"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The specified continuation token is invalid.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "|c20a527537415245bfe753235e69900f.2774c1f9_",
+                                    "error_code": 1007,
+                                    "message": "Query parameter 'continuationToken' is invalid. Please include the valid token specified in the pagination response."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nListingResponseModel<ContentItemModel> responseItems = await client.ListContentItemsAsync();"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request GET \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            }
+        },
+        "/{project_id}/items/{item_identifier}": {
+            "get": {
+                "description": "Retrieve metadata about a content item.\n\nIf you want to retrieve content data, see how to [retrieve language variants of a content item](https://docs.kontent.ai/link-to/list_variants_of_an_item_1380d97).\n",
+                "operationId": "retrieve-a-content-item",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/item_identifier_dc3e32b"
+                    }
+                ],
+                "summary": "Retrieve a content item",
+                "tags": [
+                    "Content items"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The specified content item.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItem"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The specified content item was not found.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "00000000-0000-0000-8918-0080000000cd",
+                                    "error_code": 100,
+                                    "message": "The requested content item '59713' was not found."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nContentItemIdentifier identifier = ContentItemIdentifier.ById(Guid.Parse(\"f4b3fc05-e988-4dae-9ac1-a94aba566474\"));\n// ContentItemIdentifier identifier = ContentItemIdentifier.ByCodename(\"my_article\");\n// ContentItemIdentifier identifier = ContentItemIdentifier.ByExternalId(\"59713\");\n\nContentItemModel responseItems = await client.GetContentItemAsync(identifier);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request GET \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/f4b3fc05-e988-4dae-9ac1-a94aba566474 \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/codename/my_article \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/external-id/59713 \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            },
+            "put": {
+                "description": "Update an existing content item or add a new content item specified by its external ID.\n\nYou can also specify the external ID when [adding content items](https://docs.kontent.ai/link-to/add_a_content_item_e59ba3c).\n",
+                "operationId": "upsert-a-content-item",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/item_identifier_for_upsert_bf1e709"
+                    }
+                ],
+                "summary": "Upsert a content item",
+                "tags": [
+                    "Content items"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "oneOf": [{
+                                        "$ref": "#/components/schemas/UpdateItem"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/CreateItem"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "description": "The content item to update or create.\n",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "The the specified content item was updated.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItem"
+                                },
+                                "example": {
+                                    "id": "335d17ac-b6ba-4c6a-ae31-23c1193215cb",
+                                    "name": "My new article",
+                                    "codename": "my_article",
+                                    "type": {
+                                        "id": "b7aa4a53-d9b1-48cf-b7a6-ed0b182c4b89"
+                                    },
+                                    "sitemap_locations": [],
+                                    "last_modified": "2020-04-04T13:45:30.7692802Z"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "The specified content item was created.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItem"
+                                },
+                                "example": {
+                                    "id": "335d17ac-b6ba-4c6a-ae31-23c1193215cb",
+                                    "name": "My new article",
+                                    "codename": "my_article",
+                                    "type": {
+                                        "id": "b7aa4a53-d9b1-48cf-b7a6-ed0b182c4b89"
+                                    },
+                                    "sitemap_locations": [],
+                                    "external_id": "custom-identifier-for-my-article",
+                                    "last_modified": "2020-04-04T13:45:30.7692802Z"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The provided request body is invalid.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "00000000-0000-0000-8805-0080000000bf",
+                                    "error_code": 5,
+                                    "message": "The provided request body is invalid. See the 'validation_errors' attribute for more information and specify a valid JSON object.",
+                                    "validation_errors": [{
+                                        "message": "Required property 'type' was not found or is set to null."
+                                    }]
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nstring externalId = \"59713\";\n\nContentItemUpsertModel item = new ContentItemUpsertModel()\n{\n    Name = \"On Roasts\",\n    Type = ContentTypeIdentifier.ByCodename(\"article\"),\n  \tSitemapLocations = new[] { SitemapNodeIdentifier.ByCodename(\"articles\") }\n};\n\nContentItemModel contentItemResponse = await client.UpsertContentItemByExternalIdAsync(externalId, item);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request PUT \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/external-id/59713 \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json' \\\n  --data '\n{\n  \"name\": \"On Roasts\",\n  \"codename\": \"my_article_my_article\",\n  \"type\": {\n    \"codename\": \"article\"\n  }\n}'"
+                    }
+                ]
+            },
+            "delete": {
+                "description": "Deleting a content item also deletes all of its language variants. If you only want to delete a specific language variant, see how to [delete a language variant](https://docs.kontent.ai/link-to/delete_a_language_variant_c809f52).\n",
+                "operationId": "delete-a-content-item",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/item_identifier_dc3e32b"
+                    }
+                ],
+                "summary": "Delete a content item",
+                "tags": [
+                    "Content items"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "The specified content item was deleted from the project.\n"
+                    },
+                    "404": {
+                        "description": "The specified content item was already deleted or doesn't exist.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "2d2803b7-9b67-4bd8-b3d2-436aa077827f",
+                                    "error_code": 100,
+                                    "message": "The requested content item 'f4b3fc05-e988-4dae-9ac1-a94aba566474' was not found."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nContentItemIdentifier identifier = ContentItemIdentifier.ById(Guid.Parse(\"f4b3fc05-e988-4dae-9ac1-a94aba566474\"));\n// ContentItemIdentifier identifier = ContentItemIdentifier.ByCodename(\"my_article\");\n// ContentItemIdentifier identifier = ContentItemIdentifier.ByExternalId(\"59713\");\n\nawait client.DeleteContentItemAsync(identifier);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request DELETE \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/f4b3fc05-e988-4dae-9ac1-a94aba566474 \\\n# --url https://manage.kontent.ai/v1/projects/f4b3fc05-e988-4dae-9ac1-a94aba566474/items/codename/my_article \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/external-id/59713 \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            }
+        },
+        "/{project_id}/items/{item_identifier}/variants": {
+            "get": {
+                "description": "Retrieve a list of language variants of a content item.\n\nIf the variant contains both a published and draft version, the API will return the draft version since the draft is considered as the latest version.\n\nIf you want to retrieve metadata information about the parent content item, see how to [retrieve a content item](https://docs.kontent.ai/link-to/retrieve_a_content_item_c02594a).\n",
+                "operationId": "list-language-variants-of-an-item",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/item_identifier_dc3e32b"
+                    }
+                ],
+                "summary": "List language variants of an item",
+                "tags": [
+                    "Language variants"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of language variants for the specified content item.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/LanguageVariant"
+                                    },
+                                    "uniqueItems": true,
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The specified content item was not found.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "00000000-0000-0000-9105-0080000000bf",
+                                    "error_code": 100,
+                                    "message": "The requested content item '4db9f4da-827b-4400-87c9-c47d44fba65d' was not found."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nContentItemIdentifier identifier = ContentItemIdentifier.ById((Guid.Parse(\"f4b3fc05-e988-4dae-9ac1-a94aba566474\")));\n// ContentItemIdentifier identifier = ContentItemIdentifier.ByCodename(\"my_article\");\n// ContentItemIdentifier identifier = ContentItemIdentifier.ByExternalId(\"59713\");\n\nIEnumerable<ContentItemVariantModel<MyContentTypeModel>> responseVariants = await client.ListContentItemVariantsAsync<MyContentTypeModel>(identifier);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request GET \\\n  --url https://manage.kontent.ai/projects/v1/<YOUR_PROJECT_ID>/items/f4b3fc05-e988-4dae-9ac1-a94aba566474/variants \\\n# --url https://manage.kontent.ai/projects/v1/<YOUR_PROJECT_ID>/items/codename/my_article/variants \\\n# --url https://manage.kontent.ai/projects/v1/<YOUR_PROJECT_ID>/items/external-id/59713/variants \\ \n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            }
+        },
+        "/{project_id}/items/{item_identifier}/variants/{language_identifier}": {
+            "get": {
+                "description": "Retrieve content of a language variant of a content item.\n\nIf the variant contains both a published and draft version, the API will return the draft version since the draft is considered as the latest version.\n\nIf you want to retrieve metadata about the content item, see how to [retrieve a content item](https://docs.kontent.ai/link-to/retrieve_a_content_item_c02594a).\n",
+                "operationId": "retrieve-a-language-variant",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/item_identifier_dc3e32b"
+                    },
+                    {
+                        "$ref": "#/components/parameters/language_identifier_for_variants"
+                    }
+                ],
+                "summary": "Retrieve a language variant",
+                "tags": [
+                    "Language variants"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Language variant for the specified language and content item.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LanguageVariant"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The specified language variant was not found.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "|34b4f5ab4fb3f54bbd72877d98f3121c.d1a27a5_",
+                                    "error_code": 0,
+                                    "message": "The requested content item 'getting_contents' was not found."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nContentItemIdentifier itemIdentifier = ContentItemIdentifier.ById(Guid.Parse(\"f4b3fc05-e988-4dae-9ac1-a94aba566474\"));\n// ContentItemIdentifier itemIdentifier = ContentItemIdentifier.ByCodename(\"my_article\");\n// ContentItemIdentifier itemIdentifier = ContentItemIdentifier.ByExternalId(\"59713\");\n\nLanguageIdentifier languageIdentifier = LanguageIdentifier.ById(Guid.Parse(\"d1f95fde-af02-b3b5-bd9e-f232311ccab8\"));\n// LanguageIdentifier languageIdentifier = LanguageIdentifier.ByCodename(\"es-ES\");\n\nContentItemVariantIdentifier variantIdentifier = new ContentItemVariantIdentifier(itemIdentifier, languageIdentifier);\n\nContentItemVariantModel<MyContentTypeModel> responseVariant = await client.GetContentItemVariantAsync<MyContentTypeModel>(variantIdentifier);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request GET \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/f4b3fc05-e988-4dae-9ac1-a94aba566474/variants/d1f95fde-af02-b3b5-bd9e-f232311ccab8 \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/f4b3fc05-e988-4dae-9ac1-a94aba566474/variants/codename/es-ES \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/codename/my_article/variants/d1f95fde-af02-b3b5-bd9e-f232311ccab8 \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/codename/my_article/variants/codename/es-ES \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/external-id/59713/variants/d1f95fde-af02-b3b5-bd9e-f232311ccab8 \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/external-id/59713/variants/codename/es-ES \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            },
+            "put": {
+                "description": "Add content to a language variant in an active language, or update an existing language variant.\n\nIf you're creating a new language variant, a content item for the variant must exist. It doesn't get created automatically.\n\n<div class=\"callout callout--info\">\n\n<p><strong>Updating content of elements</strong></p>\n<ul>\n  <li>Only the elements specified in the request body will be modified.</li>\n  <li>Any comments attached to the specified elements will be lost on update.</li>\n</ul>\n\n</div>\n\nWhen copying variants in an [environment](https://docs.kontent.ai/link-to/manage_environments), you can take the variant object returned by the [GET request](https://docs.kontent.ai/link-to/retrieve_a_language_variant_850b2bf) and use the object as-is in the body of this request. To migrate variants to another environment or project, see how to [import content items](https://docs.kontent.ai/link-to/import_content_items).\n",
+                "operationId": "upsert-a-language-variant",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/item_identifier_dc3e32b"
+                    },
+                    {
+                        "$ref": "#/components/parameters/language_identifier_for_variants"
+                    }
+                ],
+                "summary": "Upsert a language variant",
+                "tags": [
+                    "Language variants"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "elements"
+                                ],
+                                "properties": {
+                                    "elements": {
+                                        "additionalProperties": {
+                                            "oneOf": [{
+                                                    "$ref": "#/components/schemas/UrlSlugInVariant"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/AssetInVariant"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/NumberInVariant"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/TextInVariant"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/RichTextInVariant"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/MultipleChoiceInVariant"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/CustomElementInVariant"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/LinkedItemsInVariant"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/TaxonomyInVariant"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/DateTimeInVariant"
+                                                }
+                                            ],
+                                            "x-additionalPropertiesName": "<element_codename>"
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "example": {
+                                "elements": {
+                                    "categories": [{
+                                            "codename": "barista"
+                                        },
+                                        {
+                                            "codename": "coffee_blogger"
+                                        }
+                                    ],
+                                    "title": "En Asados",
+                                    "post_date": "2014-11-07T00:00:00Z",
+                                    "summary": "Tostar granos de café puede tardar de 6 a 13 minutos. ...",
+                                    "related_articles": [{
+                                            "codename": "coffee_processing_techniques"
+                                        },
+                                        {
+                                            "codename": "origins_of_arabica_bourbon"
+                                        }
+                                    ],
+                                    "meta_keywords": "asados, café",
+                                    "meta_description": "Tostar granos de café puede tardar de 6 a 13 minutos. ...",
+                                    "url_pattern": "on-roasts"
+                                }
+                            }
+                        }
+                    },
+                    "description": "Specifies which [elements](https://docs.kontent.ai/link-to/elements_in_language_variants_36574f3) to update. Each element is represented as a key-value pair. Depending on the element type, the element values can be strings, numbers, or arrays of [Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) objects.\n",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "The specified language variant was updated.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LanguageVariant"
+                                },
+                                "example": {
+                                    "item": {
+                                        "id": "f4b3fc05-e988-4dae-9ac1-a94aba566474"
+                                    },
+                                    "elements": {
+                                        "personas": [{
+                                                "id": "6a372f43-ccd7-e524-6308-c2094e7b6596"
+                                            },
+                                            {
+                                                "id": "4fa27320-c363-3ebe-5ab5-b531300f053f"
+                                            }
+                                        ],
+                                        "title": "En Asados",
+                                        "post_date": "2014-11-07T00:00:00Z",
+                                        "summary": "Tostar granos de café puede tardar de 6 a 13 minutos. Diferentes tiempos de asado producen diferentes tipos de café, con diferentes concentraciones de cafeína y intensidad de sabor.",
+                                        "related_articles": [{
+                                            "id": "b2fea94c-73fd-42ec-a22f-f409878de187"
+                                        }],
+                                        "meta_keywords": "asados, café",
+                                        "meta_description": "Tostar granos de café puede tardar de 6 a 13 minutos. Diferentes tiempos de asado producen diferentes tipos de café, con diferentes concentraciones de cafeína y intensidad de sabor.",
+                                        "url_pattern": "on-roasts"
+                                    },
+                                    "language": {
+                                        "id": "d1f95fde-af02-b3b5-bd9e-f232311ccab8"
+                                    },
+                                    "last_modified": "2017-11-02T09:01:05.0552136Z"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "The specified language variant was created.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LanguageVariant"
+                                },
+                                "example": {
+                                    "item": {
+                                        "id": "f4b3fc05-e988-4dae-9ac1-a94aba566474"
+                                    },
+                                    "elements": {
+                                        "personas": [{
+                                                "id": "6a372f43-ccd7-e524-6308-c2094e7b6596"
+                                            },
+                                            {
+                                                "id": "4fa27320-c363-3ebe-5ab5-b531300f053f"
+                                            }
+                                        ],
+                                        "title": "En Asados",
+                                        "post_date": "2014-11-07T00:00:00Z",
+                                        "summary": "Tostar granos de café puede tardar de 6 a 13 minutos. Diferentes tiempos de asado producen diferentes tipos de café, con diferentes concentraciones de cafeína y intensidad de sabor.",
+                                        "related_articles": [{
+                                            "id": "b2fea94c-73fd-42ec-a22f-f409878de187"
+                                        }],
+                                        "meta_keywords": "asados, café",
+                                        "meta_description": "Tostar granos de café puede tardar de 6 a 13 minutos. Diferentes tiempos de asado producen diferentes tipos de café, con diferentes concentraciones de cafeína y intensidad de sabor.",
+                                        "url_pattern": "on-roasts"
+                                    },
+                                    "language": {
+                                        "id": "d1f95fde-af02-b3b5-bd9e-f232311ccab8"
+                                    },
+                                    "last_modified": "2017-11-02T09:01:05.0552136Z"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The provided request body does not match the content type.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "00000000-0000-0000-b919-0080000000d1",
+                                    "error_code": 5,
+                                    "message": "The provided request body is invalid. See the 'validation_errors' attribute for more information and specify a valid JSON object.",
+                                    "validation_errors": [{
+                                        "message": "Value '2014-13-07T00:00:00Z' cannot be assigned to an element of 'DateTime' type.",
+                                        "path": "elements.post_date"
+                                    }]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The specified language variant does not exist.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "|34b4f5ab4fb3f54bbd72877d98f3121c.d1a27a5_",
+                                    "error_code": 0,
+                                    "message": "The requested content item 'getting_contents' was not found."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\n// Elements to update\nMyContentTypeModel stronglyTypedElements = new MyContentTypeModel\n{\n    Title = \"En Asados\",\n    PostDate = new DateTime(2014, 11, 7),\n    Summary = \"Tostar granos de café puede tardar de 6 a 13 minutos. ...\",\n    RelatedArticles = new [] { ContentItemIdentifier.ByCodename(\"coffee_processing_techniques\"), ContentItemIdentifier.ByCodename(\"origins_of_arabica_bourbon\") },\n    UrlPattern = \"on-roasts\",\n    MetaKeywords = \"asados, café\",\n    MetaDescription = \"Tostar granos de café puede tardar de 6 a 13 minutos. ...\",\n    Personas = new [] { TaxonomyTermIdentifier.ByCodename(\"barista\"), TaxonomyTermIdentifier.ByCodename(\"coffee_blogger\") }\n};\n\nContentItemIdentifier itemIdentifier = ContentItemIdentifier.ById(Guid.Parse(\"f4b3fc05-e988-4dae-9ac1-a94aba566474\"));\n// ContentItemIdentifier itemIdentifier = ContentItemIdentifier.ByCodename(\"my_article\");\n// ContentItemIdentifier itemIdentifier = ContentItemIdentifier.ByExternalId(\"59713\");\n\nLanguageIdentifier languageIdentifier = LanguageIdentifier.ById(Guid.Parse(\"d1f95fde-af02-b3b5-bd9e-f232311ccab8\"));\n// LanguageIdentifier languageIdentifier = LanguageIdentifier.ByCodename(\"es-ES\");\n\n\nContentItemVariantIdentifier identifier = new ContentItemVariantIdentifier(itemIdentifier, languageIdentifier);\n\nContentItemVariantModel<MyContentTypeModel> responseVariant = await client.UpsertContentItemVariantAsync<MyContentTypeModel>(identifier, stronglyTypedElements);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request PUT \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/f4b3fc05-e988-4dae-9ac1-a94aba566474/variants/d1f95fde-af02-b3b5-bd9e-f232311ccab8 \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/f4b3fc05-e988-4dae-9ac1-a94aba566474/variants/codename/es-ES \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/codename/my_article/variants/d1f95fde-af02-b3b5-bd9e-f232311ccab8 \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/codename/my_article/variants/codename/es-ES \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/external-id/59713/variants/d1f95fde-af02-b3b5-bd9e-f232311ccab8 \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/external-id/59713/variants/codename/es-ES \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json' \\\n  --data '\n{\n  \"elements\": {\n    \"personas\": [\n      {\n        \"codename\": \"barista\"\n      },\n      {\n        \"codename\": \"coffee_blogger\"\n      }\n    ],\n    \"title\": \"En Asados\",\n    \"post_date\": \"2014-11-07T00:00:00Z\",\n    \"summary\": \"Tostar granos de café puede tardar de 6 a 13 minutos. ...\",\n    \"related_articles\": [\n      {\n        \"codename\": \"coffee_processing_techniques\"\n      },\n      {\n        \"codename\": \"origins_of_arabica_bourbon\"\n      }\n    ],\n    \"meta_keywords\": \"asados, café\",\n    \"meta_description\": \"Tostar granos de café puede tardar de 6 a 13 minutos. ...\",\n    \"url_pattern\": \"on-roasts\"\n  }\n}'"
+                    }
+                ]
+            },
+            "delete": {
+                "description": "Deletes a specific language variant.\n\nIf you want to delete all language variants of a content item, see how to [Delete a content item](https://docs.kontent.ai/link-to/delete_a_content_item_051a7c0).\n\n<div class=\"callout callout--info\">\n\n<p>When you delete the last variant of a content item, the whole content item is deleted.</p>\n\n</div>\n",
+                "operationId": "delete-a-language-variant",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/item_identifier_dc3e32b"
+                    },
+                    {
+                        "$ref": "#/components/parameters/language_identifier_for_variants"
+                    }
+                ],
+                "summary": "Delete a language variant",
+                "tags": [
+                    "Language variants"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "The specified language variant was deleted.\n"
+                    },
+                    "404": {
+                        "description": "The specified language variant was not found.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "00000000-0000-0000-c813-0080000000c3",
+                                    "error_code": 103,
+                                    "message": "The requested content item variant was not found."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nContentItemIdentifier itemIdentifier = ContentItemIdentifier.ById(Guid.Parse(\"f4b3fc05-e988-4dae-9ac1-a94aba566474\"));\n// ContentItemIdentifier itemIdentifier = ContentItemIdentifier.ByCodename(\"my_article\");\n// ContentItemIdentifier itemIdentifier = ContentItemIdentifier.ByExternalId(\"59713\");\n\nLanguageIdentifier languageIdentifier = LanguageIdentifier.ById(Guid.Parse(\"d1f95fde-af02-b3b5-bd9e-f232311ccab8\"));\n// LanguageIdentifier languageIdentifier = LanguageIdentifier.ByCodename(\"es-ES\");\n\nContentItemVariantIdentifier identifier = new ContentItemVariantIdentifier(itemIdentifier, languageIdentifier);\n\nawait client.DeleteContentItemVariantAsync(identifier);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request DELETE \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/f4b3fc05-e988-4dae-9ac1-a94aba566474/variants/d1f95fde-af02-b3b5-bd9e-f232311ccab8 \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/f4b3fc05-e988-4dae-9ac1-a94aba566474/variants/codename/es-ES \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/codename/my_article/variants/d1f95fde-af02-b3b5-bd9e-f232311ccab8 \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/codename/my_article/variants/codename/es-ES \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/external-id/59713/variants/d1f95fde-af02-b3b5-bd9e-f232311ccab8 \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/items/external-id/59713/variants/codename/es-ES \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            }
+        },
+        "/{project_id}/files/{file_name}": {
+            "post": {
+                "description": "Add a new file. The uploaded file will not be visible in the Kentico Kontent UI unless you [add an asset](https://docs.kontent.ai/link-to/add_an_asset_a7cf801) using it.\n\n<!--Callout type=Tip-->\n\n<p><strong>Adding assets is a 2-step process</strong></p>\n<ol>\n  <li><a href=\"#operation/upload-a-binary-file\">Upload a binary file</a>&nbsp;– after uploading, you get a file reference to uploaded file.</li>\n  <li><a href=\"#operation/add-an-asset\">Create a new asset</a>&nbsp;– use the file reference to link the new asset with the file.</li>\n</ol>\n\n</div>\n\n<div class=\"callout callout--info\">\n\n<p>Maximum size limit for binary files is 100 MB.</p>\n\n</div>\n",
+                "operationId": "upload-a-binary-file",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/file_name"
+                    },
+                    {
+                        "$ref": "#/components/parameters/content_type_eb3978b"
+                    },
+                    {
+                        "$ref": "#/components/parameters/content_length"
+                    }
+                ],
+                "summary": "Upload a binary file",
+                "tags": [
+                    "Assets"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/octet-stream": {
+                            "schema": {
+                                "format": "binary",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "description": "The binary data of the file.\n",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "A file reference to the uploaded binary file.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FileReference"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The specified request body or the provided parameters are invalid.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "00000000-0000-0000-c403-0080000000c2",
+                                    "error_code": 205,
+                                    "message": "The request does not contain required header Content-Type."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nstring filePath = Path.Combine(AppContext.BaseDirectory, @\"<YOUR_PATH>\\which-brewing-fits-you-1080px.jpg\");\nstring contentType = \"image/jpeg\";\n\n// Binary file reference to be used when adding a new asset\nFileReference fileReference = await client.UploadFileAsync(new FileContentSource(filePath, contentType));\n\n// To create an asset, see the \"Add an asset\" endpoint"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request POST \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/files/which-brewing-fits-you-1080px.jpg \\\n  --data-binary \"@which-brewing-fits-you-1080px.jpg\" \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: image/jpeg' \\\n  --header 'Content-length: 125770'"
+                    }
+                ]
+            }
+        },
+        "/{project_id}/assets": {
+            "post": {
+                "description": "Use a file reference to link an existing [binary file](https://docs.kontent.ai/link-to/upload_a_binary_file_50fcad8) to a new asset. You can also create assets by upserting (PUT `/assets/external-id/<external_id>`).\n\n<div class=\"callout callout--info\">\n\n<p>Each binary file can be referenced only by a single asset.</p>\n\n</div>\n",
+                "operationId": "add-an-asset",
+                "parameters": [{
+                    "$ref": "#/components/parameters/project_id"
+                }],
+                "summary": "Add an asset",
+                "tags": [
+                    "Assets"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "description": "An asset to create.\n",
+                                "required": [
+                                    "file_reference",
+                                    "descriptions"
+                                ],
+                                "properties": {
+                                    "file_reference": {
+                                        "$ref": "#/components/schemas/FileReference"
+                                    },
+                                    "title": {
+                                        "description": "The title of the new asset. Use this parameter to better identify and filter your assets in the UI.\n",
+                                        "example": "Coffee Brewing Techniques",
+                                        "minLength": 1,
+                                        "maxLength": 50,
+                                        "type": "string"
+                                    },
+                                    "external_id": {
+                                        "description": "The external ID of the new asset. Use this parameter as a unique identifier for your assets.\n\n<div class=\"callout callout--info\">\n\n<p>You cannot upsert external ID into already existing assets within your Kentico Kontent project.</p>\n\n</div>\n",
+                                        "example": "which-brewing-fits-you",
+                                        "type": "string"
+                                    },
+                                    "descriptions": {
+                                        "description": "An array of asset descriptions.\n",
+                                        "items": {
+                                            "$ref": "#/components/schemas/AssetDescription"
+                                        },
+                                        "uniqueItems": true,
+                                        "type": "array"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "example": {
+                                "file_reference": {
+                                    "id": "fcbb12e6-66a3-4672-85d9-d502d16b8d9c",
+                                    "type": "internal"
+                                },
+                                "title": "Description of what the file contains",
+                                "external_id": "custom-asset-identifier",
+                                "descriptions": [{
+                                    "language": {
+                                        "codename": "default"
+                                    },
+                                    "description": "The asset's alt text in the default language describing what the file or image shows."
+                                }]
+                            }
+                        }
+                    },
+                    "description": "The asset to create.\n",
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "The created asset.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Asset"
+                                },
+                                "example": {
+                                    "id": "fcbb12e6-66a3-4672-85d9-d502d16b8d9c",
+                                    "file_name": "file_name.jpeg",
+                                    "title": "Description of what the file contains",
+                                    "size": 148636,
+                                    "type": "image/jpeg",
+                                    "url": "https://assets-us-01.kc-usercontent.com/8d20758c-d74c-4f59-ae04-ee928c0816b7/adf26cd2-1acb-403f-9d1e-6d04e46c39f1/file_name.png",
+                                    "image_width": 1280,
+                                    "image_height": 548,
+                                    "file_reference": {
+                                        "id": "fcbb12e6-66a3-4672-85d9-d502d16b8d9c",
+                                        "type": "internal"
+                                    },
+                                    "descriptions": [{
+                                        "language": {
+                                            "codename": "default"
+                                        },
+                                        "description": "The asset's alt text in the default language describing what the file or image shows."
+                                    }],
+                                    "external_id": "custom-asset-identifier",
+                                    "last_modified": "2017-09-12T08:29:36.1645977Z"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The specified request was invalid.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "00000000-0000-0000-1614-0080000000cd",
+                                    "error_code": 5,
+                                    "message": "The provided request body is invalid. See the 'validation_errors' attribute for more information and specify a valid JSON object.",
+                                    "validation_errors": [{
+                                        "message": "Required property 'description' not found in JSON. Path 'descriptions[0]', line 7, position 6.",
+                                        "path": "descriptions[0]",
+                                        "line": 7,
+                                        "position": 6
+                                    }]
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n \nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nAssetUpsertModel model = new AssetUpsertModel\n{\n    // To create a file reference, see the \"Upload a binary file\" endpoint\n    FileReference = fileReference,\n\n    Title = \"Coffee Brewing Techniques\",\n  \n    Descriptions = new List<AssetDescription> \n    {\n        new AssetDescription { Description = \"Coffee Brewing Techniques\", Language = LanguageIdentifier.ByCodename(\"en-US\") },\n        new AssetDescription { Description = \"Técnicas para hacer café\", Language = LanguageIdentifier.ByCodename(\"es-ES\") }\n    }\n};\n\nAssetModel assetResult = await client.CreateAssetAsync(model);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request POST \\\n  --url https://manage.kontent.ai/projects/v1/<YOUR_PROJECT_ID>/assets \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json' \\\n  --data '\n{\n  \"file_reference\": {\n    \"id\": \"fcbb12e6-66a3-4672-85d9-d502d16b8d9c\",\n    \"type\": \"internal\"\n  },\n  \"title\": \"Coffee Brewing Techniques\",\n  \"external_id\": \"which-brewing-fits-you\",\n  \"descriptions\": [\n    {\n      \"language\": {\n        \"codename\": \"en-US\"\n      },\n      \"description\": \"Coffee Brewing Techniques\"\n    },\n    {\n      \"language\": {\n        \"codename\": \"es-ES\"\n      },\n      \"description\": \"Técnicas para hacer café\"\n    }\n  ]\n}'"
+                    }
+                ]
+            },
+            "get": {
+                "description": "Retrieve a dynamically paginated list of assets.\n",
+                "operationId": "list-assets",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/continuationtoken"
+                    }
+                ],
+                "summary": "List assets",
+                "tags": [
+                    "Assets"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A paginated list response with assets\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "assets",
+                                        "pagination"
+                                    ],
+                                    "properties": {
+                                        "assets": {
+                                            "description": "A list of assets.\n",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Asset"
+                                            },
+                                            "uniqueItems": true,
+                                            "type": "array"
+                                        },
+                                        "pagination": {
+                                            "$ref": "#/components/schemas/Pagination"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The specified continuation token is invalid.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "|c20a527537415245bfe753235e69900f.2774c1f9_",
+                                    "error_code": 1007,
+                                    "message": "Query parameter 'continuationToken' is invalid. Please include the valid token specified in the pagination response."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nListingResponseModel<AssetModel> responseAssets = await client.ListAssetsAsync();"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request GET \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/assets \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            }
+        },
+        "/{project_id}/assets/{asset_identifier}": {
+            "get": {
+                "description": "Retrieve information about an asset.\n",
+                "operationId": "retrieve-an-asset",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/asset_identifier"
+                    }
+                ],
+                "summary": "Retrieve an asset",
+                "tags": [
+                    "Assets"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The specified asset.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Asset"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The specified asset was not found.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "00000000-0000-0000-0e3f-0080000000d9",
+                                    "error_code": 105,
+                                    "message": "The requested asset 'fcbb12e6-66a3-4672-85d9-d502d16b8d9d' was not found."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nAssetIdentifier identifier = AssetIdentifier.ById(Guid.Parse(\"fcbb12e6-66a3-4672-85d9-d502d16b8d9c\"));\n// AssetIdentifier identifier = AssetIdentifier.ByExternalId(\"which-brewing-fits-you\");\n\nAssetModel responseAssets = await client.GetAssetAsync(identifier);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request GET \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/assets/fcbb12e6-66a3-4672-85d9-d502d16b8d9c \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/assets/external-id/which-brewing-fits-you \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            },
+            "put": {
+                "description": "Update an existing asset or add a new asset specified by external ID.\n",
+                "operationId": "upsert-an-asset",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/asset_identifier_for_upsert"
+                    }
+                ],
+                "summary": "Upsert an asset",
+                "tags": [
+                    "Assets"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "oneOf": [{
+                                        "$ref": "#/components/schemas/CreateAsset"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/UpdateAsset"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "description": "The asset to update or create.\n",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "The updated asset.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Asset"
+                                },
+                                "example": {
+                                    "id": "fcbb12e6-66a3-4672-85d9-d502d16b8d9c",
+                                    "file_name": "which-brewing-fits-you-1080px.jpg",
+                                    "title": "Coffee Brewing Techniques",
+                                    "size": 125770,
+                                    "type": "image/jpeg",
+                                    "url": "https://assets-us-01.kc-usercontent.com/975bf280-fd91-488c-994c-2f04416e5ee3/fcbb12e6-66a3-4672-85d9-d502d16b8d9c/which-brewing-fits-you-1080px.jpg",
+                                    "image_width": 1000,
+                                    "image_height": 666,
+                                    "file_reference": {
+                                        "id": "fcbb12e6-66a3-4672-85d9-d502d16b8d9c",
+                                        "type": "internal"
+                                    },
+                                    "descriptions": [{
+                                            "language": {
+                                                "id": "00000000-0000-0000-0000-000000000000"
+                                            },
+                                            "description": "Coffee Brewing Techniques"
+                                        },
+                                        {
+                                            "language": {
+                                                "id": "d1f95fde-af02-b3b5-bd9e-f232311ccab8"
+                                            },
+                                            "description": "Técnicas para hacer café"
+                                        }
+                                    ],
+                                    "last_modified": "2017-09-12T08:29:36.1645977Z"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "The specified asset was created.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Asset"
+                                },
+                                "example": {
+                                    "id": "fcbb12e6-66a3-4672-85d9-d502d16b8d9c",
+                                    "file_name": "which-brewing-fits-you-1080px.jpg",
+                                    "title": "Coffee Brewing Techniques",
+                                    "size": 125770,
+                                    "type": "image/jpeg",
+                                    "url": "https://assets-us-01.kc-usercontent.com/975bf280-fd91-488c-994c-2f04416e5ee3/fcbb12e6-66a3-4672-85d9-d502d16b8d9c/which-brewing-fits-you-1080px.jpg",
+                                    "image_width": 1000,
+                                    "image_height": 666,
+                                    "file_reference": {
+                                        "id": "fcbb12e6-66a3-4672-85d9-d502d16b8d9c",
+                                        "type": "internal"
+                                    },
+                                    "descriptions": [{
+                                            "language": {
+                                                "id": "00000000-0000-0000-0000-000000000000"
+                                            },
+                                            "description": "Coffee Brewing Techniques"
+                                        },
+                                        {
+                                            "language": {
+                                                "id": "d1f95fde-af02-b3b5-bd9e-f232311ccab8"
+                                            },
+                                            "description": "Técnicas para hacer café"
+                                        }
+                                    ],
+                                    "last_modified": "2017-09-12T08:29:36.1645977Z"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The request body is invalid.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "00000000-0000-0000-1614-0080000000cd",
+                                    "error_code": 5,
+                                    "message": "The provided request body is invalid. See the 'validation_errors' attribute for more information and specify a valid JSON object.",
+                                    "validation_errors": [{
+                                        "message": "Required property 'description' not found in JSON. Path 'descriptions[0]', line 7, position 6.",
+                                        "path": "descriptions[0]",
+                                        "line": 7,
+                                        "position": 6
+                                    }]
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\n// Note: When creating a new asset, use external ID as an identifier. When updating an asset, you can use internal ID or external ID\nAssetIdentifier identifier = AssetIdentifier.ByExternalId(\"which-brewing-fits-you\");\n// AssetIdentifier identifier = AssetIdentifier.ById(Guid.Parse(\"fcbb12e6-66a3-4672-85d9-d502d16b8d9c\"));\n\n// Used when creating a new asset or updating an existing one\nAssetUpdateModel model = new AssetUpdateModel\n{\n\n    Title = \"Coffee Brewing Techniques\",\n  \n    Descriptions = new List<AssetDescription> \n    {\n        new AssetDescription { Description = \"Coffee Brewing Techniques\", Language = LanguageIdentifier.ByCodename(\"en-US\") },\n        new AssetDescription { Description = \"Técnicas para hacer café\", Language = LanguageIdentifier.ByCodename(\"es-ES\") }\n    }\n};\n\nCancellationTokenSource source = new CancellationTokenSource();\nbyte[] content = await System.IO.File.ReadAllBytesAsync(\"./which-brewing-fits-you-1080px.jpg\", source.Token);\nstring fileName = \"which-brewing-fits-you-1080px.jpg\";\nstring contentType = \"image/jpeg\";\nstring externalId = \"which-brewing-fits-you\";\n\nAssetModel updatedAssetResponse = await client.UpdateAssetAsync(identifier, model);\nAssetModel createdAssetResponse = await client.UpsertAssetByExternalIdAsync(externalId, new FileContentSource(content, fileName, contentType), model);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request PUT \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/assets/external-id/which-brewing-fits-you \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'\n  --data '\n{\n  \"file_reference\": {\n    \"id\": \"fcbb12e6-66a3-4672-85d9-d502d16b8d9c\",\n    \"type\": \"internal\"\n  },\n  \"title\": \"Coffe Brewing Techniques\",\n  \"descriptions\": [\n    {\n      \"language\": {\n        \"codename\": \"en-US\"\n      },\n      \"description\": \"Coffee Brewing Techniques\"\n    },\n    {\n      \"language\": {\n        \"codename\": \"es-ES\"\n      },\n      \"description\": \"Técnicas para hacer café\"\n    }\n  ]\n}'"
+                    }
+                ]
+            },
+            "delete": {
+                "description": "Removes an unused asset.\n",
+                "operationId": "delete-an-asset",
+                "parameters": [{
+                        "$ref": "#/components/parameters/project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/asset_identifier"
+                    }
+                ],
+                "summary": "Delete an asset",
+                "tags": [
+                    "Assets"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "The specified asset was deleted from the project.\n"
+                    },
+                    "404": {
+                        "description": "The specified asset was already deleted or doesn't exist.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "00000000-0000-0000-6f12-0080000000c7",
+                                    "error_code": 105,
+                                    "message": "The requested asset 'fcbb12e6-66a3-4672-85d9-d502d16b8d9c' was not found."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\nAssetIdentifier identifier = AssetIdentifier.ById(Guid.Parse(\"fcbb12e6-66a3-4672-85d9-d502d16b8d9c\"));\n// AssetIdentifier identifier = AssetIdentifier.ByExternalId(\"which-brewing-fits-you\");\n\nawait client.DeleteAssetAsync(identifier);"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request DELETE \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/assets/fcbb12e6-66a3-4672-85d9-d502d16b8d9c \\\n# --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/assets/external-id/which-brewing-fits-you \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            }
+        },
+        "/{project_id}": {
+            "get": {
+                "description": "Retrieve the ID and display name of your project.\n",
+                "operationId": "retrieve-project-information",
+                "parameters": [{
+                    "$ref": "#/components/parameters/project_id"
+                }],
+                "summary": "Retrieve project information",
+                "tags": [
+                    "Project information"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The project ID and display name.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The requested project is archived.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "request_id": "|297f7b9e2c9113438004b21063787915.c46264bc_",
+                                    "error_code": 0,
+                                    "message": "The requested Project '975bf280-fd91-488c-994c-2f04416e5ee3' was not found."
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": "JavaScript",
+                        "source": "// Tip: Find more about JS/TS SDKs at https://docs.kontent.ai/javascript\n// Using ES6 syntax\nimport { ManagementClient } from '@kentico/kontent-management';\n\nconst client = new ManagementClient({\n  projectId: '<YOUR_PROJECT_ID>',\n  apiKey: '<YOUR_API_KEY>'\n});\n\nconst response = await client.projectInformation()\n  .toPromise();"
+                    },
+                    {
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\n\nvar client = new ManagementClient(new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n});\n\nvar response = await client.GetProjectInformation();"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request GET \\\n  --url https://manage.kontent.ai/v2/projects/<YOUR_PROJECT_ID> \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            }
+        },
+        "/{project_id}/validate": {
+            "post": {
+                "description": "Checks your project's content items for issues, such as:\n* Content elements [referencing](https://docs.kontent.ai/link-to/references_9d4e6e9) non-existing objects.\n* Values of content elements not meeting the limitations configured in content types.\n* Content types referencing non-existing taxonomy groups.\n\nWe recommend that you use this endpoint after successfully importing content into your project.\n",
+                "operationId": "validate-project-content",
+                "parameters": [{
+                    "$ref": "#/components/parameters/project_id"
+                }],
+                "summary": "Validate project content",
+                "tags": [
+                    "Project validation"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A project report summarizing the issues found in the specified project.\n",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProjectReport"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codeSamples": [{
+                        "lang": ".NET",
+                        "source": "// Tip: Find more about .NET SDKs at https://docs.kontent.ai/net\nusing Kentico.Kontent.Management;\nusing Kentico.Kontent.Management.Models.ProjectReport;\n\nManagementOptions options = new ManagementOptions\n{\n    ApiKey = \"<YOUR_API_KEY>\",\n    ProjectId = \"<YOUR_PROJECT_ID>\"\n};\n\nManagementClient client = new ManagementClient(options);\n\n// Checks your project and stores the validation report in the response\nProjectReportModel response = await client.ValidateProjectAsync();"
+                    },
+                    {
+                        "lang": "REST",
+                        "source": "curl --request POST \\\n  --url https://manage.kontent.ai/v1/projects/<YOUR_PROJECT_ID>/validate \\\n  --header 'Authorization: Bearer <YOUR_API_KEY>' \\\n  --header 'Content-type: application/json'"
+                    }
+                ]
+            }
+        }
+    },
+    "servers": [{
+        "description": "Management API v1",
+        "url": "https://manage.kontent.ai/v1/projects"
+    }],
+    "tags": [{
+            "description": "By default, the API keys for the Management API are **valid for 4,000 days**. The scope of the API keys is **per project per user**. This means you need a separate API key for each of your projects.\n\nThe API key inherits the identity of the user who generated it. Operations performed with the key will show in [your version history](https://docs.kontent.ai/link-to/comparing_and_restoring_versions) as changes made by the specific user.\n\nIf you regenerate the API key before its expiration date, the system will revoke the previous API key after a short while. For requests made with a revoked API key, you'll receive the `403 Unauthorized` error response.\n\n<!--CodeSample programmingLanguage=JSON platform=-->\n\n\n```json\n{\n    \"request_id\": \"800000c0-0001-fc00-b63f-84710c7967bb\",\n    \"error_code\": 7,\n    \"message\": \"The provided API key was revoked. You can find a valid API key for this project in the Kentico Kontent app.\"\n}\n```\n\n<!--CodeSample-end-->\n\n<div class=\"callout callout--info\">\n\n<p><strong>Friendly reminder</strong></p>\n<p>5 days before the API key expires, we will send a notification email to users with the <em>Manage APIs</em> <a data-item-id=\"1470ff99-76cc-4071-ae9b-8ae363ee5dd5\" href=\"https://docs.kontent.ai/link-to/role_permission_reference\">permission</a>.</p>\n\n</div>\n",
+            "name": "API key scope and validity"
+        },
+        {
+            "description": "Rate limits specify the number of requests you or your application can make to the Management API within a specific time window. There are two separate time windows, second and minute, allowing a different number of requests each.\n\nBy default, the Management API enforces the following rate limits:\n* **10** requests per second\n* **400** requests per minute\n\nThese [limits apply to each API key](https://docs.kontent.ai/link-to/api_key_scope_and_validity_0322d9c) for the Management API.\n\n<div class=\"callout callout--info\">\n\n<p><strong>Avoid parallel requests</strong></p>\n<p>We strongly advise against making multiple requests to the API in parallel. Doing so may cause unpredictable behavior and lead to inconsistencies in your content. We recommend that you wait for each request to finish before sending another one.</p>\n\n</div>\n\nWhen you reach the limit of a specific time window, the API will reject the request and respond with the [429 HTTP error](https://httpstatuses.com/429 \"Too Many Requests\").\n\n<!--CodeSample programmingLanguage=JSON platform=-->\n\n\n```json\n{\n    \"request_id\": \"80000004-0002-fd00-b63f-84710c7967bb\",\n    \"error_code\": 10000,\n    \"message\": \"API rate limit exceeded. Please retry your request later.\"\n}\n```\n\n<!--CodeSample-end-->\n\nThe error response will include the [`Retry-After` header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After) that tells you how many *seconds* you need to wait before attempting further requests. Each failed request is perfectly safe to retry.\n\nIf you begin to receive [429 HTTP errors](https://httpstatuses.com/429 \"Too Many Requests\"), reduce the frequency of your requests.\n",
+            "name": "Rate limiting"
+        },
+        {
+            "description": "References identify objects within your project. For example, you can use references to specify content types, content items, languages, and more.\n\nWhen specifying references to objects, the object can be identified by **one** of three properties:\n1.  Its internal ID, such as `18b43cc5-f4fd-0172-842b-3ae2c878cf6f`\n    * Generated by the system automatically.\n    * Unique per object type such as content item, content type, and other.\n    * Can be used to specify any object.\n2.  Its codename, such as `object_codename`\n    * Initially [generated](#tag/References/rules-for-codenames) from the object's display name.\n    * Unique per object type such as content item, content type, and other.\n    * Can be used to specify most objects.\n3.  Its external ID, such as `custom-object-identifier`\n    * Specified manually when creating the object through the Management API. The external ID cannot be changed later.\n    * Unique per object type and its subtype such as content type and its content elements, or multiple choice element and its options.\n    * Can be used to specify user-created assets, content items, content types, content groups, elements, languages, taxonomy groups, and taxonomy terms.\n\n### Rules for codenames\n\nWhen editing codenames, the new codenames must meet the following conditions:\n* Only lowercase letters, numbers, and underscores are permitted.\n* Codenames must start with a letter or an underscore and have at least one character.\n* Codenames are usually limited to 60 characters, but longer codenames are allowed for multiple choice options and taxonomy terms.\n* Codenames of elements within a snippet must be prefixed with the snippet's codename.\n* Codenames must be unique per object type. This applies to, for example, every element within a content type, every content type within a project, every content item within a project, and so on.\n\nThis means the following applies when codenames are generated automatically:\n* All letters are made lowercase.\n* All forbidden characters are replaced by `_`.\n* For any names that start with a number, the codename will start with `n`.\n* Codenames that duplicate another codename will have a random string attached to the end.\n* Codenames of elements within a snippet will be prefixed with the snippet's codename.\n* Codenames will be cut off at the character limit.\n\n## Reference object\n\n\nThe API uses internal IDs for referencing objects. This means that the reference objects in the API responses will always use internal IDs.\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Reference\" showReadOnly={true} showWriteOnly={true} /> \n\n## External IDs for imported content\n\n\nBy using external IDs to reference other objects in your project, you can import your content in the order you prefer. For example, when importing multiple articles that contain images, you can reference these images with external IDs, such as `roaster` or `coffee-cup`, before uploading them. The referenced images will be visible in the UI only after you [add them as assets](https://docs.kontent.ai/link-to/add_an_asset_a7cf801) via the Management API. With this approach, you can choose whether you want to create content items first and then upload binary files for assets, or vice versa.\n\nThis means you can use external IDs to reference objects that don't yet exist in the project and add the objects via the API later. References to non-existent objects will be stored and retrieved via the Management API as internal IDs.\n\nTo check whether your project contains any references to not-yet-created objects, see how to [validate project content](https://docs.kontent.ai/link-to/validate_project_content_c0e22b2).\n\n<div class=\"callout callout--info\">\n\n<p><strong>Referencing objects that are not in your project yet</strong></p>\n<p>The Management API supports referencing of non-existent objects in the following elements:</p>\n<ul>\n  <li><a href=\"#section/Linked-items-element\">Linked items element</a></li>\n  <li><a href=\"#section/Asset-element\">Asset element</a></li>\n  <li><a href=\"#section/Rich-text-element\">Rich text element</a> (as assets, content items, and links)</li>\n</ul>\n<p>To learn more, see how to <a data-item-id=\"41e4c06e-d21d-42d3-b036-74ca098b0e53\" href=\"https://docs.kontent.ai/link-to/importing_linked_content\">import linked content</a> to your project.</p>\n\n</div>\n\n### Missing objects in the UI\n\nIf you use external IDs to reference non-existent objects in your elements, the referenced objects won't be shown in the UI. This is because the system cannot find those objects. The referenced assets and content items will be displayed after you create them with their specific external IDs via the Management API.\n\nTo add the missing objects, see:\n* [Upsert a content item](https://docs.kontent.ai/link-to/upsert_a_content_item_cc755ac) to create content items specified by external IDs.\n* [Upsert an asset](https://docs.kontent.ai/link-to/upsert_an_asset_0982745) to create assets specified by external IDs.\n",
+            "name": "References"
+        },
+        {
+            "description": "To manage content items via the Management API, you need to send requests to URIs based on the following patterns:\n* Using internal IDs: `<base_URL>/items/<content_item_id>`\n* Using codenames: `<base_URL>/items/codename/<content_item_codename>`\n* Using external IDs: `<base_URL>/items/external-id/<content_item_external_identifier>`\n\nTo [retrieve language variants](https://docs.kontent.ai/link-to/list_variants_of_an_item_1380d97) of a specific content item, you can list the variants by specifying the internal ID, codename, or external ID of the content item.\n\n## Content item object\n\n\nThe content item object contains metadata about your content, such as the name of the content item and when the item was last modified. The content item object does not store the content itself. The content for each language variant of a content item is saved in [language variants](https://docs.kontent.ai/link-to/language_variants_bbc6039), with each content item having as many variants as there are active languages in your project.\n\n<SchemaDefinition schemaRef=\"#/components/schemas/ContentItem\" showReadOnly={true} showWriteOnly={true} /> \n",
+            "name": "Content items"
+        },
+        {
+            "description": "When you retrieve or update [language variants](https://docs.kontent.ai/link-to/language_variants_bbc6039), you will work with a set of elements. The set contains the elements as defined in the content type. The elements come in the form of key-value pairs and contain only information about their values, not their type.\n\n<div class=\"callout callout--info\">\n\n<p><strong>About element identifiers</strong></p>\n<p>In API responses, the Management API will always reference content elements with their internal IDs. When <a data-item-id=\"9de98072-589d-4076-a8bc-688c86ac0a4c\" href=\"https://docs.kontent.ai/link-to/upsert_a_language_variant\">creating or updating language variants</a> via the API, you can reference content elements by their internal IDs or codenames.</p>\n\n</div>\n\n## Asset element\n\n\nThe value of asset elements is an array of [Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) objects. Each object represents a single asset, which can be referenced only once.\n\nWhen retrieving asset elements, the Management API will always reference assets with their internal IDs.\n\nWhen updating asset elements, you can reference assets by their internal ID or external ID.\n\n<SchemaDefinition schemaRef=\"#/components/schemas/AssetInVariant\" showReadOnly={true} showWriteOnly={true} /> \n\n## Custom element\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/CustomElementInVariant\" showReadOnly={true} showWriteOnly={true} /> \n\n## Date and time element\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/DateTimeInVariant\" showReadOnly={true} showWriteOnly={true} /> \n\n## Linked items element\n\n\nThe value of linked items elements is an array of [Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) objects. Each reference represents a single content item. Every content item can be referenced only once.\n\nWhen retrieving linked items elements, the Management API will always reference content items with their internal IDs.\n\nWhen updating linked items elements, you can reference a content item by its internal ID, codename, or external ID.\n\n<SchemaDefinition schemaRef=\"#/components/schemas/LinkedItemsInVariant\" showReadOnly={true} showWriteOnly={true} /> \n\n## Multiple choice element\n\n\nThe value of *Multiple choice* elements is an array of [Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) objects. Each reference represents one of the unique multiple choice options.\n\nIf the element is configured as single option (i.e., Radio buttons), it must contain a reference to exactly one option. When configured as multiple option (i.e., Checkboxes), the element can contain references to as many options as are defined in the content type. In case no option is selected, the value of the element will be an empty array.\n\nWhen retrieving *Multiple choice* elements, the Management API will always reference the multiple choice options with their internal IDs.\n\nWhen updating *Multiple choice* elements, you can reference an option by its internal ID or codename.\n\n<SchemaDefinition schemaRef=\"#/components/schemas/MultipleChoiceInVariant\" showReadOnly={true} showWriteOnly={true} /> \n\n## Number element\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/NumberInVariant\" showReadOnly={true} showWriteOnly={true} /> \n\n## Rich text element\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/RichTextInVariant\" showReadOnly={true} showWriteOnly={true} /> \n\n### HTML5 elements allowed in rich text\n\nThe rich text value can contain specific HTML elements, tags, and attributes, and must form a valid HTML5 fragment. Only the documented HTML attributes are supported. When transforming HTML to JSON, make sure to escape all double quotes.\n\n<table>\n\n<tbody>\n\n<tr>\n\n<td>\n\n**Types**\n\n</td>\n\n<td>\n\n**HTML elements**\n\n</td>\n\n<td>\n\n**Notes**\n\n</td>\n\n</tr>\n\n<tr>\n\n<td>Paragraphs</td>\n\n<td><code>&lt;p&gt;...&lt;/p&gt;</code></td>\n\n<td>Must be used at the top level.</td>\n\n</tr>\n\n<tr>\n\n<td>Headings</td>\n\n<td><code>&lt;h1&gt;...&lt;/h1&gt;</code>, <code>&lt;h2&gt;...&lt;/h2&gt;</code>, <code>&lt;h3&gt;...&lt;/h3&gt;, <code>&lt;h4&gt;...&lt;/h4&gt;</code></td>\n\n<td>Must be used at the top level.</td>\n\n</tr>\n\n<tr>\n\n<td>Bold text</td>\n\n<td><code>&lt;strong&gt;...&lt;/strong&gt;</code></td>\n\n<td>Must be nested. The <code>&lt;b&gt;</code> tag is not supported.</td>\n\n</tr>\n\n<tr>\n\n<td>Italic text</td>\n\n<td><code>&lt;em&gt;...&lt;/em&gt;</code></td>\n\n<td>Must be nested. The <code>&lt;i&gt;</code> tag is not supported.</td>\n\n</tr>\n\n<tr>\n\n<td>Superscript</td>\n\n<td><code>&lt;sup&gt;...&lt;/sup&gt;</code></td>\n\n<td>Must be nested. Superscript and subscript are mutually exclusive.</td>\n\n</tr>\n\n<tr>\n\n<td>Subscript</td>\n\n<td><code>&lt;sub&gt;...&lt;/sub&gt;</code></td>\n\n<td>Must be nested. Superscript and subscript are mutually exclusive.</td>\n\n</tr>\n\n<tr>\n\n<td>Code</td>\n\n<td><code>&lt;code&gt;...&lt;/code&gt;</code></td>\n\n<td>Must be nested.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n[Lists](#section/Rich-text-element/lists-in-rich-text)\n\n</td>\n\n<td><code>&lt;ol&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ol&gt;</code>, <code>&lt;ul&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ul&gt;</code></td>\n\n<td>Must be nested.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n[Tables](#section/Rich-text-element/tables-in-rich-text)\n\n</td>\n\n<td><code>&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;...&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</code></td>\n\n<td>Must be used at the top level. The <code>&lt;thead&gt;</code> and <code>&lt;tfoot&gt;</code> tags are not supported.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n[Links](#section/Rich-text-element/links-in-rich-text)\n\n</td>\n\n<td><code>&lt;a ...&gt;...&lt;/a&gt;</code></td>\n\n<td>Can be used at the top level and be nested. Not all <code>&lt;a&gt;</code> attributes are supported.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n[Assets](#section/Rich-text-element/assets-in-rich-text)\n\n</td>\n\n<td><code>&lt;figure ...&gt;&lt;img ...&gt;&lt;/figure&gt;</code></td>\n\n<td>Must be used at the top level.</td>\n\n</tr>\n\n<tr>\n\n<td>\n\n[Content items](#section/Rich-text-element/content-items-in-rich-text)\n\n</td>\n\n<td><code>&lt;object ...&gt;&lt;/object&gt;</code></td>\n\n<td>Must be used at the top level.</td>\n\n</tr>\n\n<tr>\n\n<td>Line breaks</td>\n\n<td><code>&lt;br/&gt;</code></td>\n\n<td>\n\n</td>\n\n</tr>\n\n</tbody>\n\n</table>\n\n### Assets in Rich text\n\nAssets in rich text are defined by the block element `<figure>` which requires one of the following attributes: `data-asset-id` or `data-asset-external-id`. The `data-asset-external-id attribute can also reference an object that was not yet imported to Kentico Kontent. See more details about [external IDs for imported content](#section/External-IDs-for-imported-content).\n\nWhen inserting values in rich text, the `<img>` element is optional. Otherwise, the `<img>` element requires the attributes `src` and `data-asset-id`.\n\n<!--CodeSample programmingLanguage=JSON platform=-->\n\n\n```json\n{\n...\n  \"codename\": \"asset_referenced_by_internal_id\",\n  \"value\": \"<figure data-asset-id=\\\"512047f1-2f7f-45fd-9e90-e71b8feae017\\\">\n            <img src=\\\"#\\\" data-asset-id=\\\"512047f1-2f7f-45fd-9e90-e71b8feae017\\\">\n            </figure>\"\n...\n  \"codename\": \"asset_referenced_by_internal_id\",\n  \"value\": \"<figure data-asset-external-id=\\\"custom-asset-identifier\\\"></figure>\"\n...\n}\n\n```\n\n<!--CodeSample-end-->\n\n### Content items in Rich text\n\nContent items in rich text are defined by the block element `<object>`. The element requires the attributes `type`, `data-type`, and one of the following: `data-id` or `data-external-id`. The `data-external-id` attribute can also reference an object that has not yet been imported to Kentico Kontent. See more details about [external IDs for imported content](#section/External-IDs-for-imported-content).\n\n<!--CodeSample programmingLanguage=JSON platform=-->\n\n\n```json\n{\n...\n  \"codename\": \"item_referenced_by_internal_id\",\n  \"value\": \"<object type=\\\"application/kenticocloud\\\"\n            data-type=\\\"item\\\"\n            data-id=\\\"f4b3fc05-e988-4dae-9ac1-a94aba566474\\\"></object>\"\n\n  \"codename\": \"item_referenced_by_internal_id\",\n  \"value\": \"<object type=\"application/kenticocloud\"\n            data-type=\"item\"\n            data-external-id=\"my-1337-article\"></object>\"\n...\n}\n```\n\n<!--CodeSample-end-->\n\n### Links in Rich text\n\nLinks in rich text are defined as the HTML `<a>` element, for example, `<a href=\"\\#\">Link</a>`. These links can be used for web URLs, email addresses, assets, and content items. For each of the link types, the `<a>` element supports a different set of required and optional attributes.\n\n#### Links to URLs\n\nRequires the attribute `href`.\n\n<div class=\"callout callout--info\">\n\n<p><strong>Inserting URL values</strong></p>\n<p>When inserting URL values, the system might add the <code>http://</code> prefix in case the provided URL is invalid or not safe. For example, URLs using the <code>javascript</code> protocol will be prefixed. URL values starting with <code>/</code>,<code> ?</code>, or <code>#</code> are allowed.</p>\n<p>Examples of how inserted URLs are stored:</p>\n<ul>\n  <li><code>http://example.com</code> → <code>http://example.com</code></li>\n  <li><code>https://example.com</code> → <code>https://example.com</code></li>\n  <li><code>ftp://example.com</code> → <code>ftp://example.com</code></li>\n  <li><code>example.com</code> → <code>http://example.com</code></li>\n  <li><code>about-us.html</code> → <code>http://about-us.html</code></li>\n  <li><code>/about-us.html</code> → <code>/about-us.html</code></li>\n  <li><code>?query</code> → <code>?query</code></li>\n  <li><code>#anchor</code> → <code>#anchor</code></li>\n  <li><code>javascript:alert()</code> → <code>http://javascript:alert()</code></li>\n  <li><code>javascript://%0aalert()</code> → <code>http://javascript://%0aalert()</code></li>\n  <li><code>data:text/html,&lt;script&gt;alert()&lt;/script&gt;</code> → <code>http://data:text/html,&lt;script&gt;alert()&lt;/script&gt;</code></li>\n</ul>\n\n</div>\n\nOptionally, the link can specify a title and whether the link should be opened in a new browser window.\n* If the link should provide a title, the `<a>` element must specify the title attribute with a value.\n* If the link should open in a new window, the `<a>` element must specify the data-new-window attribute set to true.\n\n<div class=\"callout callout--info\">\n\n<p>Other <code>&lt;a&gt;</code> attributes, such as <code>target</code> and <code>rel</code>, are not supported for URL links.</p>\n\n</div>\n\n<!--CodeSample programmingLanguage=JSON platform=-->\n\n\n```json\n{\n...\n  \"codename\": \"link_to_url\",\n  \"value\": \"<a href=\\\"https://example.com\\\">example link</a>\"\n\n  \"codename\": \"link_to_url_new_window\",\n  \"value\": \"<a href=\\\"https://example.com\\\" data-new-window=\\\"true\\\">example link</a>\"\n\n  \"codename\": \"link_to_url_with_title\",\n  \"value\": \"<a href=\\\"https://example.com\\\" title=\\\"Example\\\">example link</a>\"\n...\n}\n```\n\n<!--CodeSample-end-->\n\n#### Links with email addresses\n\nRequires the attribute `data-email-address`. Optionally, the link can contain the attribute `data-email-subject`.\n\n<!--CodeSample programmingLanguage=JSON platform=-->\n\n\n```json\n{\n...\n  \"value\": \"<a data-email-address=\\\"cloud@kentico.com\\\"\n            data-email-subject=\\\"How do I stay Kontent?\\\">reach out</a>\"\n...\n}\n```\n\n<!--CodeSample-end-->\n\n#### Links to assets\n\nRequires one of the following attributes: `data-asset-id` or `data-asset-external-id`. The `data-asset-external-id` attribute can also reference an object that has not yet been imported to Kentico Kontent. See more details about [external IDs for imported content](#section/External-IDs-for-imported-content).\n\n<!--CodeSample programmingLanguage=JSON platform=-->\n\n\n```json\n{\n...\n  \"codename\": \"asset_linked_by_internal_id\",\n  \"value\": \"<a data-asset-id=\\\"0b590263-3fe5-4773-afae-5a3f6e511e66\\\">Hario Mini Mill</a>\"\n\n  \"codename\": \"asset_linked_by_external_id\",\n  \"value\": \"<a data-asset-external-id=\\\"hario_mini\\\">Hario Mini Mill</a>\"\n...\n}\n```\n\n<!--CodeSample-end-->\n\n#### Links to content items\n\nRequires one of the following attributes: `data-item-id` or `data-item-external-id`. The `data-item-external-id` attribute can also reference an object that has not yet been imported to Kentico Kontent. See more details about [external IDs for imported content](#section/External-IDs-for-imported-content).\n\n<!--CodeSample programmingLanguage=JSON platform=-->\n\n\n```json\n{\n...\n  \"codename\": \"item_linked_by_internal_id\",\n  \"value\": \"<a data-item-id=\\\"f4b3fc05-e988-4dae-9ac1-a94aba566474\\\">On Roasts</a>\n\n  \"codename\": \"item_linked_by_external_id\",\n  \"value\": \"<a data-item-external-id=\\\"on_roasts\\\">On Roasts</a>\"\n...\n}\n```\n\n<!--CodeSample-end-->\n\n### Lists in Rich text\n\nLists in rich text are defined as standard HTML lists, either ordered (`<ol>`) or unordered (`<ul>`). Each list item can contain another nested list, a piece of text, or be empty.\n\n<!--CodeSample programmingLanguage=JSON platform=-->\n\n\n```json\n{\n...\n  \"value\": \"<ol>\n             <li>A list item</li>\n             <li></li>\n             <li>Another list item\n               <ul>\n                 <li>Nested list item</li>\n               </ul>\n             </li>\n            </ol>\"\n...\n}\n```\n\n<!--CodeSample-end-->\n\n### Tables in Rich text\n\nTables in rich text are defined as standard HTML tables with the table cells and rows contained within the `<tbody>` element. The tables cells and rows cannot be merged.\n\n<!--CodeSample programmingLanguage=JSON platform=-->\n\n\n```json\n{\n...\n  \"value\": \"<table><tbody>\n             <tr>\n               <td>Type A</td><td>Type B</td><td>Type C</td>\n             </tr>\n             <tr>\n               <td>12.4</td><td>3.14</td><td>34.1</td>\n             </tr>\n            </tbody></table>\"\n...\n}\n```\n\n<!--CodeSample-end-->\n\n## Taxonomy element\n\n\nThe value of *Taxonomy* elements is an array of [Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) objects. Each reference represents a taxonomy term of a specific taxonomy group. Every taxonomy term can be referenced only once.\n\nWhen retrieving *Taxonomy* elements, the Management API will always reference taxonomy terms with their internal IDs.\n\nWhen updating *Taxonomy* elements, you can reference taxonomy terms by their internal ID or codename.\n\n<SchemaDefinition schemaRef=\"#/components/schemas/TaxonomyInVariant\" showReadOnly={true} showWriteOnly={true} /> \n\n## Text element\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/TextInVariant\" showReadOnly={true} showWriteOnly={true} /> \n\n## URL slug\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/UrlSlugInVariant\" showReadOnly={true} showWriteOnly={true} /> \n",
+            "name": "Elements in language variants"
+        },
+        {
+            "description": "Language variants represent a localized variant of a content item. For example, when your project contains 2 active languages, each content item in that project can have 2 language variants.\n\n<div class=\"callout callout--info\">\n\n<p><strong>Deactivated languages</strong></p>\n<p>If a <a data-item-id=\"9e0f560c-5ee4-4649-818a-c5f934b82f4a\" href=\"https://docs.kontent.ai/link-to/set_up_langauges\">language is deactivated</a> in the project settings, the respective language variants cannot be retrieved via the Management API. In such cases, the API will return a 404 not found error.</p>\n\n</div>\n\nEvery language variant is generally tied to a specific [content item](https://docs.kontent.ai/link-to/content_items_01eeb10) and project [language](https://docs.kontent.ai/link-to/languages). This means you need to specify a language identifier when you request the variant, even if your project contains only one language.\n\nTo manage language variants via the Management API, send requests to URLs based on the following patterns:\n* Item ID + Language ID: `<base_URL>/items/<content_item_id>/variants/<language_id>`\n* Item ID + Language codename: `<base_URL>/items/<content_item_id>/variants/codename/<language_codename>`\n* Item codename + Language ID: `<base_URL>/items/codename/<content_item_codename>/variants/<language_id>`\n* Item codename + Language codename: `<base_URL>/items/codename/<content_item_codename>/variants/codename/<language_codename>`\n* Item external ID + Language ID: `<base_URL>/items/external-id/<content_item_external_id>/variants/<language_id>`\n* Item external ID + Language codename: `<base_URL>/items/external-id/<content_item_external_id>/variants/codename/<language_codename>`\n\nThese endpoints accept GET, PUT, and DELETE requests, allowing you to retrieve, upsert, and delete language variants. You can mix and match the identifiers of content items and languages when requesting language variants.\n\n## Language variant object\n\n\nWhen copying or migrating language variants, you can take the language variant object returned [when retrieving a language variant](https://docs.kontent.ai/link-to/retrieve_a_language_variant_850b2bf) and use it without modification in the body of a [request to upsert a language variant](https://docs.kontent.ai/link-to/upsert_a_language_variant_0e7d242).\n\n<SchemaDefinition schemaRef=\"#/components/schemas/LanguageVariant\" showReadOnly={true} showWriteOnly={true} /> \n",
+            "name": "Language variants"
+        },
+        {
+            "description": "Assets in Kentico Kontent consist of a reference to a binary file and metadata describing the file. Each binary file can be referenced only by a single asset. Once an asset is created, the file it references cannot be changed, you can only modify the asset's descriptions and title.\n\n<!--Callout type=Tip-->\n\n<p><strong>Adding assets is a 2-step process</strong></p>\n<ol>\n  <li><a href=\"#operation/upload-a-binary-file\">Upload a binary file</a>&nbsp;– after uploading, you get a file reference to uploaded file.</li>\n  <li><a href=\"#operation/add-an-asset\">Create a new asset</a>&nbsp;– use the file reference to link the new asset with the file.</li>\n</ol>\n\n</div>\n\n<div class=\"callout callout--info\">\n\n<p>Binary files that are not used by any assets will not be visible in the Kentico Kontent UI.</p>\n\n</div>\n\n## Asset object\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Asset\" showReadOnly={true} showWriteOnly={true} /> \n",
+            "name": "Assets"
+        },
+        {
+            "description": "## Project information object\n\n\nThe project information object contains basic information about your project, i.e., the project ID and display name. By calling the [Retrieve project information](https://docs.kontent.ai/link-to/retrieve_project_information_8ae1003) endpoint, you can also validate your [Management API key](https://docs.kontent.ai/link-to/api_key_scope_and_validity_0322d9c).\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Project\" showReadOnly={true} showWriteOnly={true} /> \n",
+            "name": "Project information"
+        },
+        {
+            "description": "After importing your content in Kentico Kontent, you can [validate the whole project](https://docs.kontent.ai/link-to/validate_project_content) to find out whether there are any issues within the imported content.\n\n## Project report object\n\n\nA project validity report contains a list of issues found in language variants of call content items. The issues can indicate that either certain elements reference non-existing objects or contain values that do not meet the limitations set by a content type.\n\n<SchemaDefinition schemaRef=\"#/components/schemas/ProjectReport\" showReadOnly={true} showWriteOnly={true} /> \n\n## Element issue object\n\n\nFor each issue found in a specific language variant, the `issues` array will contain an element issue with metadata about the element and a list of validation messages describing the problem.\n\nA note on terminology in messages: A \"content module\" is a content item referenced in *Linked items* or *Rich text* elements. See [Linked content and components](https://docs.kontent.ai/link-to/linked_content_and_components) for more details.\n\n<SchemaDefinition schemaRef=\"#/components/schemas/ElementIssue\" showReadOnly={true} showWriteOnly={true} /> \n",
+            "name": "Project validation"
+        }
+    ],
+    "components": {
+        "parameters": {
+            "project_id": {
+                "description": "Identifies your project.\n",
+                "in": "path",
+                "name": "project_id",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/String"
+                }
+            },
+            "item_identifier_dc3e32b": {
+                "description": "Identifies a content item by its internal ID (e.g., `335d17ac-b6ba-4c6a-ae31-23c1193215cb`), external ID (e.g., `external-id/custom-identifier-for-my-article`), or codename (e.g., `codename/my_article`).\n",
+                "in": "path",
+                "name": "item_identifier",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/String"
+                }
+            },
+            "continuationtoken": {
+                "description": "Determines the page of results to retrieve.\n\nTo get the next page, see the pagination object in the response and set the `continuationToken` parameter to the value of the `continuation_token` property.\n",
+                "in": "query",
+                "name": "continuationToken",
+                "schema": {
+                    "$ref": "#/components/schemas/String"
+                }
+            },
+            "item_identifier_for_upsert_bf1e709": {
+                "description": "Identifies a content item by its internal ID (e.g., `f4b3fc05-e988-4dae-9ac1-a94aba566474`), external ID (e.g., `external-id/59713`), or codename (e.g., `codename/on_roasts `).\n* When creating a new content item, use an [external ID](https://docs.kontent.ai/link-to/references_9d4e6e9) as the item's identifier.\n* When updating an existing content item, identify the item by its codename, [external ID](https://docs.kontent.ai/link-to/references_9d4e6e9), or internal ID.\n\n<div class=\"callout callout--info\">\n\n<p><strong>External IDs</strong></p>\n<p>If the specified external ID is not used by an existing content item, the API will create a new item. If the content item specified by the external ID already exists, the properties specified in the request body will be updated.</p>\n\n</div>\n",
+                "in": "path",
+                "name": "item_identifier",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/String"
+                }
+            },
+            "language_identifier_for_variants": {
+                "description": "Identifies the language by its internal ID (e.g., `d1f95fde-af02-b3b5-bd9e-f232311ccab8`) or codename (e.g., `codename/es-ES`).\n",
+                "in": "path",
+                "name": "language_identifier",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/String"
+                }
+            },
+            "file_name": {
+                "description": "Specifies the name of the uploaded binary file. The file name specified in the URL will be used for the asset name when you create an asset.\n\nIf the name of your file contains [reserved characters](https://tools.ietf.org/html/rfc3986#section-2.2), you need to URL encode the file name first. For instance, use `my%20file%232.png` instead of `my file#2.png`. The file will then show as `my file#2.png` in the Kontent UI.\n",
+                "in": "path",
+                "name": "file_name",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/String"
+                }
+            },
+            "content_type_eb3978b": {
+                "description": "Specifies the [media type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the binary data.\n",
+                "in": "header",
+                "name": "Content-type",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/String"
+                }
+            },
+            "content_length": {
+                "description": "Specifies the size of the binary file in bytes.\n",
+                "in": "header",
+                "name": "Content-length",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/PositiveInteger"
+                }
+            },
+            "asset_identifier": {
+                "description": "Identifies the asset by internal ID (e.g., `fcbb12e6-66a3-4672-85d9-d502d16b8d9c`) or external ID (e.g., `external-id/which-brewing-fits-you`).\n",
+                "in": "path",
+                "name": "asset_identifier",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/String"
+                }
+            },
+            "asset_identifier_for_upsert": {
+                "description": "Identifies an asset by its internal ID (e.g., `fcbb12e6-66a3-4672-85d9-d502d16b8d9c`) or external ID (e.g., `external-id/which-brewing-fits-you`).\n* When adding a new asset, use an external ID as the asset's identifier.\n* When updating an existing asset, identify the asset either by its internal ID or external ID.\n\n<div class=\"callout callout--info\">\n\n<p><strong>New vs existing assets</strong></p>\n<p>If the specified external ID is not used by an existing asset, the API will create a new asset. For existing assets, the API updates only the specified asset's descriptions and title.</p>\n\n</div>\n",
+                "in": "path",
+                "name": "asset_identifier",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/String"
+                }
+            }
+        },
+        "requestBodies": {},
+        "responses": {},
+        "schemas": {
+            "String": {
+                "type": "string"
+            },
+            "Reference": {
+                "description": "[Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) to a specific object in the project.\n",
+                "properties": {
+                    "id": {
+                        "description": "The referenced object's internal ID.\n",
+                        "example": "3f367e4f-75b7-4b48-be3b-1136bbaf1f53",
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "codename": {
+                        "description": "The referenced object's codename. The value of the `codename` property must meet the conditions defined in [rules for codenames](#tag/References/rules-for-codenames).\n",
+                        "example": "object_codename",
+                        "writeOnly": true,
+                        "minLength": 1,
+                        "maxLength": 60,
+                        "type": "string"
+                    },
+                    "external_id": {
+                        "description": "The referenced object's [external ID](https://docs.kontent.ai/link-to/references_9d4e6e9). The value of the `external_id` property must not contain the following characters: `/`, `.`, `;`.\n",
+                        "example": "your-own-custom-identifier",
+                        "writeOnly": true,
+                        "minLength": 1,
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ContentItem": {
+                "required": [
+                    "name",
+                    "type"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "The content item's internal ID.\n",
+                        "example": "335d17ac-b6ba-4c6a-ae31-23c1193215cb",
+                        "readOnly": true,
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The content item's display name.\n",
+                        "example": "My article",
+                        "minLength": 1,
+                        "maxLength": 200,
+                        "type": "string"
+                    },
+                    "codename": {
+                        "description": "The content item's codename. Unless set while [creating the content item](https://docs.kontent.ai/link-to/add_a_content_item_e59ba3c), it is [initially generated](#tag/References/rules-for-codenames) from the item's `name` and can later be [modified](https://docs.kontent.ai/link-to/upsert_a_content_item_cc755ac).\n",
+                        "example": "my_article",
+                        "minLength": 1,
+                        "maxLength": 60,
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "[Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) to the item's content type.\n",
+                        "example": {
+                            "id": "d89b6348-7cdc-444a-8e1e-adacb564f2a2"
+                        },
+                        "allOf": [{
+                            "$ref": "#/components/schemas/Reference"
+                        }]
+                    },
+                    "sitemap_locations": {
+                        "description": "The content item's location (or locations) in the project sitemap.\n",
+                        "example": [],
+                        "deprecated": true,
+                        "items": {
+                            "$ref": "#/components/schemas/Reference"
+                        },
+                        "type": "array"
+                    },
+                    "external_id": {
+                        "description": "The content item's external ID. The external ID can be used as a unique identifier to retrieve content from a different system.\n\n<div class=\"callout callout--info\">\n\n<p>External IDs cannot be <a data-item-id=\"cc755acc-d15c-4f42-90ba-b1ac33d9602e\" href=\"https://docs.kontent.ai/link-to/upsert_a_content_item_cc755ac\">upserted into existing items</a>.</p>\n\n</div>\n",
+                        "example": "custom-identifier-for-my-article",
+                        "type": "string"
+                    },
+                    "last_modified": {
+                        "description": "The [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) formatted date and time of the last change to the content item.\n\n<div class=\"callout callout--info\">\n\n<p><strong>Workflows and values</strong></p>\n<p>Moving content items through workflow (either <a data-item-id=\"ae0faaab-bc00-4e83-9a22-ac917e00f0ea\" href=\"https://docs.kontent.ai/link-to/moving_content_items_through_their_workflow\">in UI</a> or <a data-item-id=\"b3eeb0ca-a1a0-44ca-9cf2-e766cb72f14f\" href=\"https://docs.kontent.ai/link-to/change_the_workflow_step_of_a_language_variant\">through the API</a>) doesn't affect the <code>last_modified</code> value.</p>\n\n</div>\n",
+                        "example": "2019-04-04T13:45:30.7692802Z",
+                        "readOnly": true,
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationError": {
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "path": {
+                        "type": "string"
+                    },
+                    "line": {
+                        "type": "integer"
+                    },
+                    "position": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "Error": {
+                "description": "Error response\n",
+                "example": {
+                    "request_id": "|797b0d5e2cecaf41b17a5aa4ca1b9276.d1956d1_",
+                    "error_code": 5,
+                    "message": "The provided request body is invalid. See the 'validation_errors' attribute for more information and specify a valid JSON object.",
+                    "validation_errors": [{
+                        "message": "No patch operations were provided, provide at least one operation."
+                    }]
+                },
+                "required": [
+                    "request_id",
+                    "error_code",
+                    "message"
+                ],
+                "properties": {
+                    "request_id": {
+                        "description": "The performed request's unique ID.\n",
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "error_code": {
+                        "description": "The specific internal code for the type of error. Only useful for finding patterns among error requests.\n",
+                        "format": "int32",
+                        "minimum": 1,
+                        "type": "integer"
+                    },
+                    "message": {
+                        "description": "The error message explaining why the error occurred.\n",
+                        "type": "string"
+                    },
+                    "validation_errors": {
+                        "description": "A list of specific issues that occurred when processing the request.\n",
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object"
+            },
+            "Pagination": {
+                "description": "Information about the next page of results.\n",
+                "required": [
+                    "continuation_token",
+                    "next_page"
+                ],
+                "properties": {
+                    "continuation_token": {
+                        "description": "Identifier of the next page of results. Is `null` when on the last page of results.\n",
+                        "example": "+RID:~...",
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "next_page": {
+                        "description": "A URL to the next page of results. Is `null` when on the last page of results.\n",
+                        "example": "https://manage.kontent.ai/v2/projects/<project_id>/<resource>?continuationToken=%2bRID%3a~...",
+                        "nullable": true,
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateItem": {
+                "description": "The content item to update.\n",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The content item's display name.\n",
+                        "example": "My new article",
+                        "minLength": 1,
+                        "maxLength": 200,
+                        "type": "string"
+                    },
+                    "codename": {
+                        "description": "The content item's codename. Unless set while [creating the content item](https://docs.kontent.ai/link-to/add_a_content_item_e59ba3c), it is [initially generated](#tag/References/rules-for-codenames) from the item's `name` and can later be [modified](https://docs.kontent.ai/link-to/upsert_a_content_item_cc755ac). When upserting an item without specifying its `codename`, the `codename` gets autogenerated based on the `name`'s value.\n",
+                        "example": "my_article",
+                        "type": "string"
+                    },
+                    "sitemap_locations": {
+                        "description": "One or more references to sitemap locations.\n",
+                        "example": [],
+                        "deprecated": true,
+                        "items": {
+                            "$ref": "#/components/schemas/Reference"
+                        },
+                        "uniqueItems": true,
+                        "type": "array"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateItem": {
+                "description": "The content item to insert.\n",
+                "allOf": [{
+                        "$ref": "#/components/schemas/UpdateItem"
+                    },
+                    {
+                        "required": [
+                            "type"
+                        ],
+                        "properties": {
+                            "type": {
+                                "description": "[Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) to the item's content type.\n",
+                                "example": {
+                                    "codename": "article"
+                                },
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/Reference"
+                                }]
+                            },
+                            "external_id": {
+                                "description": "The content item's external ID. The external ID can be used as a unique identifier to retrieve content from a different system.\n",
+                                "example": "custom-identifier-for-my-article",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "AssetInVariant": {
+                "description": "The value of asset elements is an array of [Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) objects. Each object represents a single asset, which can be referenced only once.\n\nWhen retrieving asset elements, the Management API will always reference assets with their internal IDs.\n\nWhen updating asset elements, you can reference assets by their internal ID or external ID.\n",
+                "example": [{
+                    "id": "66d73245-10e5-4478-93e7-5609fee3cdf7"
+                }],
+                "items": {
+                    "$ref": "#/components/schemas/Reference"
+                },
+                "uniqueItems": true,
+                "type": "array"
+            },
+            "CustomElementInVariant": {
+                "description": "When retrieving and updating custom elements, the format of the value will be identical for both GET and PUT operations.\n",
+                "example": "#00ffff",
+                "nullable": true,
+                "minLength": 0,
+                "maxLength": 100000,
+                "type": "string"
+            },
+            "DateTimeInVariant": {
+                "description": "Time in this element is interpreted as [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time) and stored as an [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) formatted string.\n\nWhen retrieving and updating date & time elements, the format of the value will be identical for both GET and PUT operations.\n",
+                "example": "2019-10-31T00:00:00Z",
+                "nullable": true,
+                "format": "date-time",
+                "type": "string"
+            },
+            "LinkedItemsInVariant": {
+                "description": "The value of linked items elements is an array of [Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) objects. Each reference represents a single content item. Every content item can be referenced only once.\n\nWhen retrieving linked items elements, the Management API will always reference content items with their internal IDs.\n\nWhen updating linked items elements, you can reference a content item by its internal ID, codename, or external ID.\n",
+                "example": [{
+                    "id": "117cdfae-52cf-4885-b271-66aef6825612"
+                }],
+                "items": {
+                    "$ref": "#/components/schemas/Reference"
+                },
+                "type": "array"
+            },
+            "MultipleChoiceInVariant": {
+                "description": "The value of *Multiple choice* elements is an array of [Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) objects. Each reference represents one of the unique multiple choice options.\n\nIf the element is configured as single option (i.e., Radio buttons), it must contain a reference to exactly one option. When configured as multiple option (i.e., Checkboxes), the element can contain references to as many options as are defined in the content type. In case no option is selected, the value of the element will be an empty array.\n\nWhen retrieving *Multiple choice* elements, the Management API will always reference the multiple choice options with their internal IDs.\n\nWhen updating *Multiple choice* elements, you can reference an option by its internal ID or codename.\n",
+                "example": [{
+                    "id": "a831d60b-ff0e-7df1-61d2-73e851a5deab"
+                }],
+                "items": {
+                    "$ref": "#/components/schemas/Reference"
+                },
+                "uniqueItems": true,
+                "type": "array"
+            },
+            "NumberInVariant": {
+                "description": "When retrieving and updating number elements, the format of the value will be identical for both GET and PUT operations.\n",
+                "example": 3,
+                "nullable": true,
+                "format": "float",
+                "type": "number"
+            },
+            "RichTextInVariant": {
+                "description": "By default, if there is no text, the element's value is a single empty paragraph: `<p><br/></p>`. The element's value can contain HTML formatted text, specific HTML elements, tags, and atrributes, and must form a valid HTML5 fragment.\n\n<div class=\"callout callout--info\">\n\n<p><strong>Nesting HTML elements in rich text</strong></p>\n<p>At the top level, only the following elements are allowed: <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>, <code>&lt;h4&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;table&gt;</code>, <code>&lt;object&gt;</code> (for content items and components), and <code>&lt;figure&gt;</code> (for images). These top-level elements can NOT be nested except for lists (<code>&lt;ul&gt;</code> and <code>&lt;ol&gt;</code>). Text is not allowed at the top level with the exception of new lines and white space characters.</p>\n<p>The table <code>&lt;td&gt;</code> element can alternatively contain top level elements except for <code>&lt;table&gt;</code> and <code>&lt;object&gt;</code>.</p>\n<p>The&nbsp;<code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>, <code>&lt;h4&gt;</code>, <code>&lt;li&gt;</code>, and <code>&lt;td&gt;</code> elements can contain text and the following inline elements: <code>&lt;a&gt;</code>, <code>&lt;code&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;sub&gt;</code>, <code>&lt;sup&gt;</code>. These elements can also contain <code>&lt;br/&gt;</code> elements for specifying break lines.&nbsp;</p>\n<p>The <code>&lt;a&gt;</code>, <code>&lt;code&gt;</code>, <code>&lt;em&gt;</code>, and <code>&lt;strong&gt;</code> inline elements can be nested but they cannot cross one another. For example, it's not allowed to open the <code>&lt;em&gt;</code> element, then the <code>&lt;strong&gt;</code> element, and then close the <code>&lt;em&gt;</code> element. Lists can be nested as long as the nested list (<code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code>) is the last HTML element of the list item, for example, <code>&lt;ol&gt;&lt;li&gt;List item&lt;ul&gt;&lt;li&gt;Nested list item&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;</code>.</p>\n\n</div>\n\nLearn more about allowed [HTML elements in rich text](#section/Rich-text-element) elements.\n",
+                "example": "<h3>Medium roast</h3>\\n<p>These exempt a <strong>stronger</strong> flavor than light <a data-item-id=\\\"f4b3fc05-e988-4dae-9ac1-a94aba566474\\\">roasts</a>. The beans are still more matte than oily<sup><a href=\\\"#footnote-1\\\">1</a></sup>.</p>\\n<figure data-asset-id=\\\"66d73245-10e5-4478-93e7-5609fee3cdf7\\\"><img src=\\\"#\\\" data-asset-id=\\\"66d73245-10e5-4478-93e7-5609fee3cdf7\\\"></figure>\\n<p>Caffeine contents are decreased. Medium roasts lack the <code>grainy</code> taste of lighter roasts. You also get a more balanced flavor, aroma and acidity.</p>\\n<object type=\\\"application/kenticocloud\\\" data-type=\\\"item\\\" data-id=\\\"cf106f4e-30a4-42ef-b313-b8ea3fd3e5c5\\\"></object> ",
+                "maxLength": 100000,
+                "type": "string"
+            },
+            "TaxonomyInVariant": {
+                "description": "The value of *Taxonomy* elements is an array of [Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) objects. Each reference represents a taxonomy term of a specific taxonomy group. Every taxonomy term can be referenced only once.\n\nWhen retrieving *Taxonomy* elements, the Management API will always reference taxonomy terms with their internal IDs.\n\nWhen updating *Taxonomy* elements, you can reference taxonomy terms by their internal ID or codename.\n",
+                "example": [{
+                    "id": "6a372f43-ccd7-e524-6308-c2094e7b6596"
+                }],
+                "items": {
+                    "$ref": "#/components/schemas/Reference"
+                },
+                "uniqueItems": true,
+                "type": "array"
+            },
+            "TextInVariant": {
+                "description": "When retrieving and updating *Text*elements, the format of the value will be identical for both GET and PUT operations.\n",
+                "example": "Plaintext, plain and simple.",
+                "nullable": true,
+                "minLength": 0,
+                "maxLength": 100000,
+                "type": "string"
+            },
+            "UrlSlugInVariant": {
+                "description": "When retrieving and updating URL slug elements, the format of the value will be identical for both GET and PUT operations.\n\n<div class=\"callout callout--info\">\n\n<p><strong>Automatic vs. manual mode</strong></p>\n<p>The URL slug element can function in two modes, automatic and manual. When creating language variants in automatic mode, the system automatically generates the element's value based on the text element of your choice.</p>\n<p>If you modify the element's value directly (either in UI or via API), the element switches to the manual mode. In this mode, the element does not react to changes made to the dependent text element. Learn about <a data-item-id=\"478df623-4456-4413-92fe-04c360f679f3\" href=\"https://docs.kontent.ai/link-to/creating_seo_friendly_urls\">creating SEO-friendly URLs</a> in your projects.</p>\n\n</div>\n",
+                "example": "user-and-seo-friendly-url-slug",
+                "type": "string"
+            },
+            "LanguageVariant": {
+                "description": "Localized variant of a content item.\n",
+                "required": [
+                    "item",
+                    "elements",
+                    "language",
+                    "last_modified"
+                ],
+                "properties": {
+                    "item": {
+                        "description": "[Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) to the content item.\n",
+                        "example": {
+                            "id": "b69ed774-8fb2-4413-8d12-d4c193a66f7a"
+                        },
+                        "allOf": [{
+                            "$ref": "#/components/schemas/Reference"
+                        }]
+                    },
+                    "elements": {
+                        "description": "List of elements as defined in the item's content type.\n",
+                        "example": {
+                            "title": "Write like a pro",
+                            "content": "<p>Lorem ipsum dolor sit amet.</p>",
+                            "author": [{
+                                "id": "7ada5ba4-ce00-435d-b233-83364d33705e"
+                            }]
+                        },
+                        "additionalProperties": {
+                            "oneOf": [{
+                                    "$ref": "#/components/schemas/AssetInVariant"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/CustomElementInVariant"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/DateTimeInVariant"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/LinkedItemsInVariant"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/MultipleChoiceInVariant"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/NumberInVariant"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/RichTextInVariant"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/TaxonomyInVariant"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/TextInVariant"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/UrlSlugInVariant"
+                                }
+                            ],
+                            "x-additionalPropertiesName": "<element_codename>"
+                        },
+                        "type": "object"
+                    },
+                    "language": {
+                        "description": "[Reference](https://docs.kontent.ai/link-to/references_9d4e6e9) to the language of the variant.\n\n<div class=\"callout callout--info\">\n\n<p>The default language will always have the ID of <code>00000000-0000-0000-0000-000000000000</code>.</p>\n\n</div>\n",
+                        "example": {
+                            "id": "00000000-0000-0000-0000-000000000000"
+                        },
+                        "allOf": [{
+                            "$ref": "#/components/schemas/Reference"
+                        }]
+                    },
+                    "last_modified": {
+                        "description": "[ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) formatted date and time of the last change of content.\n",
+                        "example": "2019-02-27T19:08:25.404Z",
+                        "readOnly": true,
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PositiveInteger": {
+                "format": "int32",
+                "minimum": 0,
+                "type": "integer"
+            },
+            "FileReference": {
+                "description": "Points to a specific binary file uploaded to your project.\n",
+                "required": [
+                    "id",
+                    "type"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "The binary file's internal ID.\n",
+                        "example": "806ec84e-7c71-4856-9519-ee3dd3558583",
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "The type of the file reference.\n",
+                        "example": "internal",
+                        "enum": [
+                            "internal"
+                        ],
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AssetDescription": {
+                "description": "An asset description defines a description of an asset for a single language.\n",
+                "required": [
+                    "language",
+                    "description"
+                ],
+                "properties": {
+                    "language": {
+                        "$ref": "#/components/schemas/Reference"
+                    },
+                    "description": {
+                        "description": "Description of the asset for a single language.\n",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Asset": {
+                "description": "A single asset object.\n",
+                "required": [
+                    "id",
+                    "file_name",
+                    "title",
+                    "image_width",
+                    "image_height",
+                    "size",
+                    "type",
+                    "url",
+                    "file_reference",
+                    "descriptions",
+                    "last_modified"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "The asset's internal ID.\n",
+                        "example": "fcbb12e6-66a3-4672-85d9-d502d16b8d9c",
+                        "readOnly": true,
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "file_name": {
+                        "description": "The file's name.\n\nDetermined by the file referenced in the `file_reference` property.\n",
+                        "example": "file_name.png",
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "title": {
+                        "description": "The asset's display name. The title can be specified when [adding assets](https://docs.kontent.ai/link-to/add_an_asset_a7cf801), [updating or upserting assets](https://docs.kontent.ai/link-to/upsert_an_asset_0982745). If not specified, the `title ` property is `null`.\n",
+                        "example": "Makes the asset easier to find when you need it",
+                        "nullable": true,
+                        "maxLength": 200,
+                        "type": "string"
+                    },
+                    "image_width": {
+                        "description": "The image's width in pixels. Is `null` if the file is not an image.\n\nDetermined by the file referenced in the `file_reference` property.\n",
+                        "example": 1280,
+                        "nullable": true,
+                        "readOnly": true,
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "image_height": {
+                        "description": "The image's height in pixels. Is `null` if the file is not an image.\n\nDetermined by the file referenced in the `file_reference` property.\n",
+                        "example": 548,
+                        "nullable": true,
+                        "readOnly": true,
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "size": {
+                        "description": "The file's size in bytes.\n\nDetermined by the file referenced in the `file_reference` property.\n",
+                        "example": 148636,
+                        "readOnly": true,
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "type": {
+                        "description": "The file's [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types).\n\nDetermined by the file referenced in the `file_reference` property.\n",
+                        "example": "image/png",
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "The asset's URL.\n",
+                        "example": "https://assets-us-01.kc-usercontent.com/8d20758c-d74c-4f59-ae04-ee928c0816b7/adf26cd2-1acb-403f-9d1e-6d04e46c39f1/file_name.png",
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "file_reference": {
+                        "$ref": "#/components/schemas/FileReference"
+                    },
+                    "descriptions": {
+                        "description": "The asset's description for each active language.\n",
+                        "example": [{
+                            "language": {
+                                "id": "00000000-0000-0000-0000-000000000000"
+                            },
+                            "description": "The asset's alt text for the default language."
+                        }],
+                        "items": {
+                            "$ref": "#/components/schemas/AssetDescription"
+                        },
+                        "uniqueItems": true,
+                        "type": "array"
+                    },
+                    "external_id": {
+                        "description": "The asset's external ID. The external ID can be specified when [adding assets](https://docs.kontent.ai/link-to/add_an_asset_a7cf801) (POST `/assets`) or [upserting assets](https://docs.kontent.ai/link-to/upsert_an_asset_0982745) (PUT `/assets/external-id/<external_id>`). If not specified, the `external_id` property is not present.\n",
+                        "example": "custom-asset-identifier",
+                        "type": "string"
+                    },
+                    "last_modified": {
+                        "description": "[ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) formatted date and time of the last change to the asset.\n",
+                        "example": "2020-09-12T08:29:36.1645977Z",
+                        "readOnly": true,
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateAsset": {
+                "description": "The asset to update.\n",
+                "example": {
+                    "title": "Coffee Brewing Techniques",
+                    "descriptions": [{
+                            "language": {
+                                "codename": "en-US"
+                            },
+                            "description": "Coffee Brewing Techniques"
+                        },
+                        {
+                            "language": {
+                                "codename": "es-ES"
+                            },
+                            "description": "Técnicas para hacer café"
+                        }
+                    ]
+                },
+                "required": [
+                    "descriptions"
+                ],
+                "properties": {
+                    "title": {
+                        "description": "The title of the new asset. Use this parameter to better identify and filter your assets in the UI.\n",
+                        "example": "Coffee Brewing Techniques",
+                        "minLength": 1,
+                        "maxLength": 200,
+                        "type": "string"
+                    },
+                    "descriptions": {
+                        "description": "Asset descriptions for each active language.\n",
+                        "items": {
+                            "$ref": "#/components/schemas/AssetDescription"
+                        },
+                        "uniqueItems": true,
+                        "type": "array"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateAsset": {
+                "description": "The asset to create.\n",
+                "example": {
+                    "file_reference": {
+                        "id": "fcbb12e6-66a3-4672-85d9-d502d16b8d9c",
+                        "type": "internal"
+                    },
+                    "title": "Coffee Brewing Techniques",
+                    "descriptions": [{
+                            "language": {
+                                "codename": "en-US"
+                            },
+                            "description": "Coffee Brewing Techniques"
+                        },
+                        {
+                            "language": {
+                                "codename": "es-ES"
+                            },
+                            "description": "Técnicas para hacer café"
+                        }
+                    ]
+                },
+                "allOf": [{
+                        "$ref": "#/components/schemas/UpdateAsset"
+                    },
+                    {
+                        "required": [
+                            "file_reference"
+                        ],
+                        "properties": {
+                            "file_reference": {
+                                "$ref": "#/components/schemas/FileReference"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "Project": {
+                "description": "The `project` object contains the project ID and display name.\n",
+                "required": [
+                    "id",
+                    "name",
+                    "environment"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "The ID of the project.\n",
+                        "example": "8d20758c-d74c-4f59-ae04-ee928c0816b7",
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The display name of the project.\n",
+                        "example": "Sample project",
+                        "type": "string"
+                    },
+                    "environment": {
+                        "description": "The environment of the specified project.\n",
+                        "example": "production",
+                        "minLength": 1,
+                        "maxLength": 200,
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Metadata": {
+                "description": "Information about the given object.\n",
+                "required": [
+                    "id",
+                    "name",
+                    "codename"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "The ID of the given object.\n",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The display name of the given object.\n",
+                        "type": "string"
+                    },
+                    "codename": {
+                        "description": "The codename of the given object.\n",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ElementIssue": {
+                "description": "For each issue found in a specific language variant or content type, the `issues` array will contain a content element issue with metadata about the content element and an array of validation messages describing the problem.\n",
+                "example": {
+                    "element": {
+                        "id": "23375e4a-2ed8-42bf-aa3a-dfb32e6a42ec",
+                        "name": "Body copy",
+                        "codename": "content"
+                    },
+                    "messages": [
+                        "Element 'Body copy' contains an image 'Screenshot.png' that doesn't match the set limits: maximum width = 1280px."
+                    ]
+                },
+                "required": [
+                    "element",
+                    "messages"
+                ],
+                "properties": {
+                    "element": {
+                        "$ref": "#/components/schemas/Metadata"
+                    },
+                    "messages": {
+                        "description": "Validation messages for the content element.\n\n<div class=\"callout callout--info\">\n\n<p><strong>Terminology in messages</strong></p>\n<p>A \"content module\" is a content item referenced in the Linked items or Rich text elements. See <a data-item-id=\"286dbb0e-f673-494f-abfd-3f39c7ec3446\" href=\"https://docs.kontent.ai/link-to/linked_content_and_components\">Linked content and components</a> for more details.</p>\n\n</div>\n",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object"
+            },
+            "ProjectReport": {
+                "description": "A project validity report contains a list of issues found in language variants of all content items. For example, the issues can indicate that certain content elements contain values that do not meet the limitations set by a content type.\n",
+                "example": {
+                    "project": {
+                        "id": "975bf280-fd91-488c-994c-2f04416e5ee3",
+                        "name": "Sample Project"
+                    },
+                    "variant_issues": [{
+                            "item": {
+                                "id": "b2fea94c-73fd-42ec-a22f-f409878de187",
+                                "name": "Origins of Arabica Bourbon",
+                                "codename": "origins_of_arabica_bourbon"
+                            },
+                            "language": {
+                                "id": "00000000-0000-0000-0000-000000000000",
+                                "name": "English (United States)",
+                                "codename": "en-US"
+                            },
+                            "issues": [{
+                                "element": {
+                                    "id": "ee7c3687-b469-6c56-3ac6-c8dfdc8b58b5",
+                                    "name": "Related articles",
+                                    "codename": "related_articles"
+                                },
+                                "messages": [
+                                    "Element 'Related articles' contains a content module Colombia Carlos Imbachi of type Coffee that is not allowed in this context."
+                                ]
+                            }]
+                        },
+                        {
+                            "item": {
+                                "id": "cf106f4e-30a4-42ef-b313-b8ea3fd3e5c5",
+                                "name": "My article",
+                                "codename": "my_article"
+                            },
+                            "language": {
+                                "id": "d1f95fde-af02-b3b5-bd9e-f232311ccab8",
+                                "name": "Spanish (Spain)",
+                                "codename": "es-ES"
+                            },
+                            "issues": [{
+                                "element": {
+                                    "id": "b9dc537c-2518-e4f5-8325-ce4fce26171e",
+                                    "name": "Meta description",
+                                    "codename": "meta_description"
+                                },
+                                "messages": [
+                                    "Element 'Meta description' should have at most 160 characters(s) but has 174 character(s)."
+                                ]
+                            }]
+                        }
+                    ]
+                },
+                "required": [
+                    "project",
+                    "variant_issues"
+                ],
+                "properties": {
+                    "project": {
+                        "$ref": "#/components/schemas/Project"
+                    },
+                    "variant_issues": {
+                        "description": "Report of the problems found in the project's content.\n",
+                        "items": {
+                            "description": "The `variant_issues` attribute is an array of issues found in the content of the project. Each variant issue object contains information necessary to identify the language variant (content item and project language metadata) and lists the content elements.\n",
+                            "required": [
+                                "item",
+                                "language",
+                                "issues"
+                            ],
+                            "properties": {
+                                "item": {
+                                    "$ref": "#/components/schemas/Metadata"
+                                },
+                                "language": {
+                                    "$ref": "#/components/schemas/Metadata"
+                                },
+                                "issues": {
+                                    "description": "Information about issues found in specific content elements.\n",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ElementIssue"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "description": "This API uses OAuth 2.0 [bearer token](https://datatracker.ietf.org/doc/html/rfc6750) (API key) to authorize requests. Requests with an incorrect or missing `Authorization` header will fail with an [error](#section/Errors).\n",
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "Bearer <YOUR_API_KEY>"
+            }
+        }
+    },
+    "security": [{
+        "Bearer": []
+    }]
+}

@@ -15,17 +15,17 @@ export const theme = {
   colors: {
     // tonalOffset: 0.2,
     primary: {
-      main: '#227a88',
+      main: '#231F20',
       // light: ({ colors }) => lighten(colors.tonalOffset, colors.primary.main),
       // dark: ({ colors }) => darken(colors.tonalOffset, colors.primary.main),
       // contrastText: ({ colors }) => readableColor(colors.primary.main),
     },
-    // success: {
-    //   main: '#00aa13',
+    success: {
+       main: '#44B77A',
     //   light: ({ colors }) => lighten(colors.tonalOffset * 3, colors.success.main),
     //   dark: ({ colors }) => darken(colors.tonalOffset, colors.success.main),
     //   contrastText: ({ colors }) => readableColor(colors.success.main),
-    // },
+    },
     // error: {
     //   main: '#e53935',
     //   light: ({ colors }) => lighten(colors.tonalOffset * 2, colors.error.main),
