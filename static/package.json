@@ -1,0 +1,20 @@
+{
+  "name": "redocly-api-reference-assets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@auth0/auth0-spa-js": "^1.18.0",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-less": "^5.0.0",
+    "gulp-rename": "^2.0.0",
+    "less-plugin-autoprefix": "^2.0.0"
+  }
+}
