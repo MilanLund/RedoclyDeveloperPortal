@@ -1,6 +1,6 @@
 - page: learn/reference/management-api.page.yaml
 
-- page: learn/reference/management-api-v2.page.yaml
+#- page: learn/reference/management-api-v2.page.yaml
 
 - page: learn/reference/delivery-api.page.yaml
 

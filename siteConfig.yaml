@@ -16,7 +16,7 @@ toc:
 oasDefinitions:
   managementApi: ./learn/reference/management_api_v1.json
   deliveryApi: ./learn/reference/delivery_api.json
-  managementApiV2: ./learn/reference/management_api_v2.json
+  #managementApiV2: ./learn/reference/management_api_v2.json
   prototypeApi: ./learn/reference/prototype_api.json
   # add links to definitions in our API registry by using a fully qualified URL.
 stylesheets:
