@@ -1,0 +1,699 @@
+# This file instructs Redocly's linter to ignore the rules contained for specific parts of your API.
+# See https://redoc.ly/docs/cli/ for more information.
+learn/reference/management_api_v1.json:
+  info-license:
+    - '#/info'
+  no-invalid-media-type-examples:
+    - >-
+      #/paths/~1{project_id}~1items/post/responses/400/content/application~1json/example/error_code
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/get/responses/404/content/application~1json/example/error_code
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/requestBody/content/application~1json/example/elements/categories
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/requestBody/content/application~1json/example/elements/title
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/requestBody/content/application~1json/example/elements/post_date
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/requestBody/content/application~1json/example/elements/summary
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/requestBody/content/application~1json/example/elements/related_articles
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/requestBody/content/application~1json/example/elements/meta_keywords
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/requestBody/content/application~1json/example/elements/meta_description
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/requestBody/content/application~1json/example/elements/url_pattern
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/200/content/application~1json/example/elements/personas
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/200/content/application~1json/example/elements/title
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/200/content/application~1json/example/elements/post_date
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/200/content/application~1json/example/elements/summary
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/200/content/application~1json/example/elements/related_articles
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/200/content/application~1json/example/elements/meta_keywords
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/200/content/application~1json/example/elements/meta_description
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/200/content/application~1json/example/elements/url_pattern
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/201/content/application~1json/example/elements/personas
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/201/content/application~1json/example/elements/title
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/201/content/application~1json/example/elements/post_date
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/201/content/application~1json/example/elements/summary
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/201/content/application~1json/example/elements/related_articles
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/201/content/application~1json/example/elements/meta_keywords
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/201/content/application~1json/example/elements/meta_description
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/201/content/application~1json/example/elements/url_pattern
+    - >-
+      #/paths/~1{project_id}~1items~1{item_identifier}~1variants~1{language_identifier}/put/responses/404/content/application~1json/example/error_code
+    - >-
+      #/paths/~1{project_id}/get/responses/404/content/application~1json/example/error_code
+  operation-4xx-response:
+    - '#/paths/~1{project_id}~1validate/post/responses'
+learn/reference/management_api_v2.json:
+  spec:
+    - '#/components/parameters/asset_identifier_for_upsert'
+    - '#/components/parameters/collection_identifier'
+    - '#/components/parameters/item_identifier_for_upsert'
+    - '#/components/parameters/language_identifier_for_languages'
+    - '#/components/parameters/rendition_identifier'
+    - '#/components/parameters/role_identifier'
+    - '#/components/parameters/snippet_identifier'
+    - '#/components/parameters/subscription_id'
+    - '#/components/parameters/taxonomy_group_identifier'
+    - '#/components/parameters/user_identifier'
+    - '#/components/parameters/webhook_identifier'
+    - '#/components/parameters/x_continuation_4a04ea9'
+  no-unresolved-refs:
+    - >-
+      #/components/schemas/a9a71576_d9ff_015f_c112_066db949c318/properties/pagination
+    - >-
+      #/components/schemas/bd9b0d40_a378_01b3_0305_6fcdd9a3b6c5/properties/pagination
+    - >-
+      #/components/schemas/c7676327_e309_0168_e7dc_e111d5bae8ff/properties/pagination
+    - >-
+      #/components/schemas/e3728bf2_b13e_012e_51e9_84952482eb74/properties/pagination
+    - >-
+      #/components/schemas/ee8ece31_6ecc_0155_2c6f_5c5045f8c8df/properties/pagination
+    - >-
+      #/components/schemas/n0590ea88_92ee_0160_1274_afd77b75bd56/properties/pagination
+    - >-
+      #/components/schemas/n072c9e1b_1a4c_01d6_debf_72c5c05787c6/properties/pagination
+    - '#/components/schemas/n0dc4f896_f84c_01b5_1730_64ef884f5e11/properties/type'
+    - '#/components/schemas/n7be53ba5_b770_01d7_6f3a_e3b5cc3bc508/properties/item'
+    - >-
+      #/components/schemas/n7be53ba5_b770_01d7_6f3a_e3b5cc3bc508/properties/language
+    - >-
+      #/components/schemas/n53513bd2_bdec_01c4_08c7_03e132000e2d/properties/pagination
+    - >-
+      #/components/schemas/n5560b7df_175a_017e_45fe_4e3e64590ae2/properties/pagination
+    - >-
+      #/components/schemas/n59a95467_830f_016e_1fd2_e6ff719ec001/properties/pagination
+    - >-
+      #/components/schemas/n6043d113_4f44_0191_a268_90a78926ad8d/properties/pagination
+    - >-
+      #/components/schemas/n71bf6f32_d327_01ca_7e92_6d41930eed2b/properties/pagination
+    - '#/components/schemas/project_report/properties/project'
+  no-invalid-media-type-examples:
+    - >-
+      #/components/responses/af723c1c_9ebc_01b1_e5af_ce89f39d9b31/content/application~1json/schema
+    - >-
+      #/components/responses/da6191c2_89c1_010b_ca07_b60aa84367fe/content/application~1json/schema
+    - >-
+      #/components/responses/dfc219f7_dfa6_01c5_0fd7_be75d678fe18/content/application~1json/example
+    - >-
+      #/components/responses/e5ef2320_92a2_0198_5294_889201148735/content/application~1json/schema
+    - >-
+      #/components/responses/f6d2d898_09b5_0197_6fc9_ada809b7f359/content/application~1json/example/published_step/create_new_version_role_ids
+    - >-
+      #/components/responses/f6d2d898_09b5_0197_6fc9_ada809b7f359/content/application~1json/example/archived_step/role_ids
+    - >-
+      #/components/responses/fc6a72fc_53cc_01a0_2f55_306f6dd2bcf5/content/application~1json/schema
+    - >-
+      #/components/responses/n04e3ae9a_da9d_014f_f89d_2ce15c81b7c2/content/application~1json/schema
+    - >-
+      #/components/responses/n0b1f4a16_313b_018d_1fec_1056c1a7be5b/content/application~1json/schema
+    - >-
+      #/components/responses/n0d3ddeaa_d364_01b1_1c01_955952c287bd/content/application~1json/schema
+    - >-
+      #/components/responses/n1788294c_0d19_012f_b3b1_32a16173c97e/content/application~1json/example
+    - >-
+      #/components/responses/n251b25ab_2a43_0130_0355_50402630160a/content/application~1json/example
+    - >-
+      #/components/responses/n2557a072_937d_01e7_d7cb_87ca83ab5dad/content/application~1json/example
+    - >-
+      #/components/responses/n3ba46931_a861_0180_d934_e38348af2cf7/content/application~1json/schema
+    - >-
+      #/components/responses/n3f40a0ba_ab35_012f_73a5_f4c28b1c5686/content/application~1json/schema
+    - >-
+      #/components/responses/n55605f9b_8bfc_0128_fb1e_066759898786/content/application~1json/schema
+    - >-
+      #/components/responses/n7597d5e0_3424_014e_5818_cb8cafb87b8e/content/application~1json/example
+    - >-
+      #/components/responses/n80b4a961_e63d_015e_52b6_d689651fd688/content/application~1json/schema
+    - >-
+      #/components/responses/n862f6431_45ae_016a_1f26_99a5bad3b079/content/application~1json/example
+    - >-
+      #/components/responses/n8af8ae5c_a7ab_01f1_1e2b_da376d932104/content/application~1json/example
+    - >-
+      #/components/requestBodies/a57f908d_1f5e_011c_49b4_0d0bad3a8893/content/application~1json/example/0/value
+    - >-
+      #/components/requestBodies/a57f908d_1f5e_011c_49b4_0d0bad3a8893/content/application~1json/example/0
+    - >-
+      #/components/requestBodies/a57f908d_1f5e_011c_49b4_0d0bad3a8893/content/application~1json/example/0/before
+    - >-
+      #/components/requestBodies/a9e3ef52_2491_01cc_39b8_cfacf38761e1/content/application~1json/schema
+    - >-
+      #/components/requestBodies/e8db298c_d3ec_0115_da0b_da8b30c34112/content/application~1json/example/transformation
+    - >-
+      #/components/requestBodies/f9c0fb15_9180_014c_19d6_0b984adadad7/content/application~1json/example
+    - >-
+      #/components/requestBodies/n055c4b71_c780_010d_bc85_17b67232bd16/content/application~1json/schema
+    - >-
+      #/components/requestBodies/n084f9711_e426_01d9_949f_43f97ca14523/content/application~1json/schema
+    - >-
+      #/components/requestBodies/n1271b5e9_82c1_0152_4cf0_08aee3d6f5d2/content/application~1json/schema
+    - >-
+      #/components/requestBodies/n172a15a6_51d9_0142_1b32_faf927b4fd32/content/application~1json/schema
+    - >-
+      #/components/requestBodies/n17e393cd_b4e1_014e_c779_7313ee91358e/content/application~1json/schema
+    - >-
+      #/components/requestBodies/n4ac5ee3b_8764_01cd_6c57_659fb8475ade/content/application~1json/schema
+    - >-
+      #/components/requestBodies/n4e79b308_90e3_0103_5a65_3606f5e1f206/content/application~1json/example/published_step/create_new_version_role_ids
+    - >-
+      #/components/requestBodies/n4e79b308_90e3_0103_5a65_3606f5e1f206/content/application~1json/example/archived_step/role_ids
+    - >-
+      #/components/requestBodies/n64f113a0_959c_01cc_2405_ca06c13c92ff/content/application~1json/example/2
+    - >-
+      #/components/requestBodies/n64f113a0_959c_01cc_2405_ca06c13c92ff/content/application~1json/example/2/reference
+    - >-
+      #/components/requestBodies/n7402c2b8_6a39_011c_647d_b0aa604cafc0/content/application~1json/example
+    - >-
+      #/components/requestBodies/n8c2a403f_5d85_0177_46d5_95ad62d48481/content/application~1json/schema
+  no-unused-components:
+    - '#/components/parameters/asset_identifier_for_upsert'
+    - '#/components/parameters/collection_identifier'
+    - '#/components/parameters/content_length'
+    - '#/components/parameters/content_type_0c9fd2d'
+    - '#/components/parameters/file_name'
+    - '#/components/parameters/item_identifier'
+    - '#/components/parameters/item_identifier_for_upsert'
+    - '#/components/parameters/language_identifier_for_languages'
+    - '#/components/parameters/language_identifier_for_variants'
+    - '#/components/parameters/project_id'
+    - '#/components/parameters/rendition_identifier'
+    - '#/components/parameters/role_identifier'
+    - '#/components/parameters/snippet_identifier'
+    - '#/components/parameters/subscription_id'
+    - '#/components/parameters/taxonomy_group_identifier'
+    - '#/components/parameters/type_identifier'
+    - '#/components/parameters/user_identifier'
+    - '#/components/parameters/webhook_identifier'
+    - '#/components/parameters/workflow_identifier'
+    - '#/components/parameters/workflow_step_identifier'
+    - '#/components/parameters/x_continuation_4a04ea9'
+    - '#/components/responses/a0dc5ead_0526_0106_8193_8efab8e514fa'
+    - '#/components/responses/a142dfcf_0f21_0100_a3c4_b9f862e834aa'
+    - '#/components/responses/a3085498_0d85_018b_baa9_7fbe1a2d47a9'
+    - '#/components/responses/a374625c_80a3_01bf_18a6_5a64f7412798'
+    - '#/components/responses/a49d89c4_4d26_0141_7f02_b8fa9e340529'
+    - '#/components/responses/a53d8182_37b3_01e9_2871_d7f42f7ec487'
+    - '#/components/responses/a6e34c4d_bb84_0113_388d_b8cb1d00b47e'
+    - '#/components/responses/a7f65f5d_614f_0196_138f_f0949d05f7d9'
+    - '#/components/responses/a8d29ef9_f20d_01d0_368d_6fa08492c120'
+    - '#/components/responses/ac23b963_66ac_0117_0e76_2631d6056b78'
+    - '#/components/responses/acd37b6c_e615_01f4_d2b5_283cccd11689'
+    - '#/components/responses/ace9df7c_c1af_01a4_19a3_824bbff296bc'
+    - '#/components/responses/af723c1c_9ebc_01b1_e5af_ce89f39d9b31'
+    - '#/components/responses/b0d44e17_c79c_0115_4488_06654a6a5d53'
+    - '#/components/responses/b11ad004_ab44_010d_45ff_a43c7e9ab6b5'
+    - '#/components/responses/b1c7617c_c874_01e2_1465_9256be86237f'
+    - '#/components/responses/b1ee013d_574e_0146_74cf_f20ab5a62759'
+    - '#/components/responses/b42c2ec8_3024_018a_7fa4_0026e9273e6d'
+    - '#/components/responses/b53399df_0dad_0167_88e8_dd892fa17fe5'
+    - '#/components/responses/b61e0b05_5a6b_0129_f93b_7ea67fd14c55'
+    - '#/components/responses/b75e7ece_af04_0194_f868_2a1c5d436b0f'
+    - '#/components/responses/b8d5d1b3_ab5b_0188_a47a_2f438cfbc13b'
+    - '#/components/responses/badee0bd_9fa8_018d_329b_21ba787e08c3'
+    - '#/components/responses/bb03be50_907d_01ae_9d95_e2806d2d0f7d'
+    - '#/components/responses/bbb4d137_8183_01b9_820b_b54ac0f0d55b'
+    - '#/components/responses/bc64eb16_ae2a_0136_2001_ddfc3978fd91'
+    - '#/components/responses/bd7ab3ae_1313_01a6_0f6f_ddfbb1029225'
+    - '#/components/responses/be6b546e_fb07_01f7_e6cd_d83c49847524'
+    - '#/components/responses/c275f022_d950_01a5_cd05_0994572ee5b3'
+    - '#/components/responses/c36b2f23_bbda_01f8_e338_c9e96aa09912'
+    - '#/components/responses/c3b9449e_b1e2_0103_27a9_af87b872427e'
+    - '#/components/responses/c7d5b7aa_6e2c_0120_64af_f725799d7ee8'
+    - '#/components/responses/c9154f47_c60f_0148_177c_1324df485844'
+    - '#/components/responses/ccbc9328_73b4_0102_c290_0d2f2b903436'
+    - '#/components/responses/continuation_token_error'
+    - '#/components/responses/d1e5d10f_eb7e_0193_3c8e_fa70a15724d9'
+    - '#/components/responses/d1e93574_f61a_01ad_278e_6406a26e30b4'
+    - '#/components/responses/d2312d16_9d85_0112_a047_f072b26cc876'
+    - '#/components/responses/d292e9f6_7e41_014b_c678_414a35bfbd27'
+    - '#/components/responses/d54d0641_2aed_017c_54bd_548d0c6328ad'
+    - '#/components/responses/d7ae3c79_03ff_01c5_04d8_62e50f8f0f60'
+    - '#/components/responses/d83b8214_b5ce_0106_8d1a_0ebb1569459b'
+    - '#/components/responses/da6191c2_89c1_010b_ca07_b60aa84367fe'
+    - '#/components/responses/dd043194_bf8b_014b_e457_9fefe2e774d5'
+    - '#/components/responses/df31b138_baf4_0195_e26d_70527befd67b'
+    - '#/components/responses/dfc219f7_dfa6_01c5_0fd7_be75d678fe18'
+    - '#/components/responses/e0d693a4_1af5_01fb_e8b1_ec349edd765d'
+    - '#/components/responses/e3022fd2_853b_01b1_7bd0_e69bdb099003'
+    - '#/components/responses/e3adeebe_90d5_0169_0ba9_5187707ef538'
+    - '#/components/responses/e5ef2320_92a2_0198_5294_889201148735'
+    - '#/components/responses/e8fae2ed_6466_015c_6d75_e4ee6058ab7a'
+    - '#/components/responses/ea48506b_c1e0_0155_b9bb_a25cb3548016'
+    - '#/components/responses/ea4e7c92_7e9e_0129_00b2_d606b86dbc35'
+    - '#/components/responses/ebe9939f_cecb_011c_17c8_0818fdcc847b'
+    - '#/components/responses/ec357b4c_51e6_01a2_3435_02b0b127d6ea'
+    - '#/components/responses/ed7c262d_9079_0142_5372_f538cff29939'
+    - '#/components/responses/f2290324_a6de_01d1_a4fd_e9fa1981cc20'
+    - '#/components/responses/f22ed817_7f88_01ad_eb30_668fe3a29103'
+    - '#/components/responses/f28376d9_4a62_01d8_eae8_90bb032cf016'
+    - '#/components/responses/f687fef0_e71c_016f_60fd_40e10b7a39fb'
+    - '#/components/responses/f6d2d898_09b5_0197_6fc9_ada809b7f359'
+    - '#/components/responses/face0b53_5f29_015a_9800_63b56f13bb74'
+    - '#/components/responses/fbe31c4f_28ec_010e_1f17_cd93000659b6'
+    - '#/components/responses/fbf8eca7_523f_0175_2b66_c9ca012a4dfe'
+    - '#/components/responses/fc6a72fc_53cc_01a0_2f55_306f6dd2bcf5'
+    - '#/components/responses/n01fa33a6_5014_01fa_2571_b8e07bdfbef5'
+    - '#/components/responses/n0274ef63_6eae_0133_4a87_45478381451d'
+    - '#/components/responses/n04e3ae9a_da9d_014f_f89d_2ce15c81b7c2'
+    - '#/components/responses/n05d37c1e_6d1e_01dc_79d5_5971b0730d6e'
+    - '#/components/responses/n077bea4e_1e7f_0189_37c5_7a83879b7f84'
+    - '#/components/responses/n07e8fdcf_4bfd_01cc_5cbb_979efa795c07'
+    - '#/components/responses/n099989da_a199_01af_8334_ea5895e7a1c6'
+    - '#/components/responses/n09f49db2_6cca_01af_d337_e72b5d1cbfb5'
+    - '#/components/responses/n0b1f4a16_313b_018d_1fec_1056c1a7be5b'
+    - '#/components/responses/n0b7b53be_a4a3_01ec_9afe_b23020cae700'
+    - '#/components/responses/n0beeb2cb_3fbb_0116_12c9_870daaf72060'
+    - '#/components/responses/n0c0bf7bf_dda3_01bd_b8fc_8772ead19341'
+    - '#/components/responses/n0c7657d6_a514_0145_d361_5d6ff43459de'
+    - '#/components/responses/n0d18b4f1_b8f2_01df_4025_e8e11d45f609'
+    - '#/components/responses/n0d3ddeaa_d364_01b1_1c01_955952c287bd'
+    - '#/components/responses/n0e79f39b_e9fd_0122_8fd6_4328bc75061f'
+    - '#/components/responses/n0e8f019b_d18b_0113_a410_47f0ca3875ac'
+    - '#/components/responses/n0ee7c727_ba61_0108_49d4_c18d7c6fdc92'
+    - '#/components/responses/n1467a449_aec6_01e3_7edb_678227bf06c0'
+    - '#/components/responses/n15b61429_e948_018c_b456_2f6da3f5414b'
+    - '#/components/responses/n1788294c_0d19_012f_b3b1_32a16173c97e'
+    - '#/components/responses/n17b7b16a_e5fd_0152_d22a_02a04f9043bd'
+    - '#/components/responses/n186ee0c4_5e3d_011c_e267_275e60f949f9'
+    - '#/components/responses/n18f9d830_80a0_017f_bacd_78924b2d0db6'
+    - '#/components/responses/n1bb5a4c8_18c3_010c_138f_c417aa2fcd99'
+    - '#/components/responses/n1d515e42_0c87_0166_6b8c_db1bbc4b1b11'
+    - '#/components/responses/n1d547696_7e80_018e_4df9_06b54e1fa762'
+    - '#/components/responses/n1e43546f_34e3_0134_2f62_f95992dd5fc3'
+    - '#/components/responses/n1ea5bb2e_8cb3_0155_c413_f203a9558db9'
+    - '#/components/responses/n2000d8bc_a293_012d_3ba7_24b9022bd928'
+    - '#/components/responses/n21296cbc_22a3_01ed_f094_da732cc43d26'
+    - '#/components/responses/n241feab5_cb69_0128_5c4d_378fe4379c62'
+    - '#/components/responses/n251b25ab_2a43_0130_0355_50402630160a'
+    - '#/components/responses/n2557a072_937d_01e7_d7cb_87ca83ab5dad'
+    - '#/components/responses/n267e0176_5ef1_013b_ef91_5a014c0eb706'
+    - '#/components/responses/n28daf91a_f4f9_0123_0749_e76060bb0780'
+    - '#/components/responses/n29decaae_2cbc_0147_dc7a_624664b7976d'
+    - '#/components/responses/n2e0fb4f9_7c67_01de_fee4_22855c1b8ca5'
+    - '#/components/responses/n2f97196d_7fe0_01ed_e4ce_6a7035990d88'
+    - '#/components/responses/n363b2c3a_64ba_01c0_f48e_50f85f9c196b'
+    - '#/components/responses/n3744dc83_e6ae_018b_6bff_9f4e0417ad71'
+    - '#/components/responses/n395b06be_50a4_01bb_da96_ea98fb6a5846'
+    - '#/components/responses/n3ba46931_a861_0180_d934_e38348af2cf7'
+    - '#/components/responses/n3bdae544_0fe0_0116_78db_8977e5e678ca'
+    - '#/components/responses/n3ccf3d08_fc64_013a_625a_523f1b84bb18'
+    - '#/components/responses/n3dcae989_a254_016c_4acf_6f34d9ec7c89'
+    - '#/components/responses/n3df392e4_3d7f_0186_5dfb_6489e24fbc1b'
+    - '#/components/responses/n3f40a0ba_ab35_012f_73a5_f4c28b1c5686'
+    - '#/components/responses/n3fb4fc7d_8fb8_0192_c56a_65d2d0c987c2'
+    - '#/components/responses/n40773764_7b4a_0165_ad00_30acd9d8c337'
+    - '#/components/responses/n475983d0_b296_0167_9c27_dbc237b9542a'
+    - '#/components/responses/n4796c74b_07ee_0138_f0e7_ae5433fd8eb5'
+    - '#/components/responses/n4943e49b_5267_0126_711d_8f33e78fec39'
+    - '#/components/responses/n4a6aabcc_74ff_010e_557a_253d9395e76e'
+    - '#/components/responses/n4d682787_90cb_01b3_9b72_0e7c0f13de6d'
+    - '#/components/responses/n4d83246d_b5a5_01e5_1005_4e9630ce48aa'
+    - '#/components/responses/n4fab9fd5_7fba_0167_1e9d_eee6b288792c'
+    - '#/components/responses/n51c1c854_1a06_0121_f24a_d2b463a06429'
+    - '#/components/responses/n53036289_b5a4_0175_839c_bb23fb4ea064'
+    - '#/components/responses/n538b2511_0785_0197_f045_027efc075915'
+    - '#/components/responses/n53a5f0d0_6e4f_0152_e798_e35b82a8a2d4'
+    - '#/components/responses/n553cf3a4_c23f_01e9_21e5_6ced5322072e'
+    - '#/components/responses/n55605f9b_8bfc_0128_fb1e_066759898786'
+    - '#/components/responses/n56368c87_6ca4_0184_8eeb_a4e03f14b696'
+    - '#/components/responses/n56c7deea_b0cd_016e_7556_d675cfec796a'
+    - '#/components/responses/n589b552a_ad02_01bf_2f9f_64a37799da07'
+    - '#/components/responses/n58a6ca25_eb2e_01eb_182b_a90212c04a9d'
+    - '#/components/responses/n5c0c1338_ba90_01f8_5042_1e0847cdfbbb'
+    - '#/components/responses/n5d45285b_753a_01f8_34ae_fda9b8e60423'
+    - '#/components/responses/n5d8f76b3_8359_0111_c2c6_9f6ad368bb01'
+    - '#/components/responses/n5f5f5286_4ca4_0131_9d6e_6260d0a588c3'
+    - '#/components/responses/n60ad4489_9cde_0145_17c9_de896fb44cba'
+    - '#/components/responses/n61646fa7_ffda_015d_5537_c825d3febaf7'
+    - '#/components/responses/n625b2802_ea9d_019d_aedb_3c48dcc2c6cc'
+    - '#/components/responses/n63893310_0412_01ee_0d65_0ed536e451a8'
+    - '#/components/responses/n66f91970_acae_012b_411f_b37bb823cd73'
+    - '#/components/responses/n67c869c8_5ca0_01b7_b19d_87db5201beea'
+    - '#/components/responses/n6b86a17e_051f_016d_6c3b_5690c22f9443'
+    - '#/components/responses/n6c1e7e91_f7dc_013c_a98b_ea2b13f815b8'
+    - '#/components/responses/n6d47f3dc_609b_01b6_4b80_a27a10218e6e'
+    - '#/components/responses/n6ef5d437_1386_01b2_b776_9146312c8c6e'
+    - '#/components/responses/n6ff927f7_7642_01ed_7c05_b901a47fe968'
+    - '#/components/responses/n7255c570_cecd_01b0_28c7_650e41f39845'
+    - '#/components/responses/n754c4ef9_9fb1_010d_3199_14081fd0877f'
+    - '#/components/responses/n7597d5e0_3424_014e_5818_cb8cafb87b8e'
+    - '#/components/responses/n75d9e2b9_1f4d_019e_0758_37a0e6ca1050'
+    - '#/components/responses/n77814322_1cd6_013d_bf3b_48f65b68fa2a'
+    - '#/components/responses/n7a64b65b_fae4_017c_2be6_e7daa78f938c'
+    - '#/components/responses/n7b6a78fa_d874_011d_4e1b_1dac8dcaa000'
+    - '#/components/responses/n80b4a961_e63d_015e_52b6_d689651fd688'
+    - '#/components/responses/n817758c8_35bf_012f_4954_027ca5847170'
+    - '#/components/responses/n849554a9_2240_0111_b621_bb02741ab12f'
+    - '#/components/responses/n8505ddd3_5708_014f_da8a_8dc5cf1820d7'
+    - '#/components/responses/n862f6431_45ae_016a_1f26_99a5bad3b079'
+    - '#/components/responses/n881a7589_ead4_0131_d1ab_917b24ff032a'
+    - '#/components/responses/n88feb8a7_61af_0161_2c65_e6906aac3ef9'
+    - '#/components/responses/n89f15939_2d76_011c_27e3_4373265bde4e'
+    - '#/components/responses/n8a57e6dc_bbb7_0113_42a4_7199763dcb3d'
+    - '#/components/responses/n8af8ae5c_a7ab_01f1_1e2b_da376d932104'
+    - '#/components/responses/n8d78d5bc_6287_0171_d2a4_d07574bc89ca'
+    - '#/components/responses/n8dc80f35_e45e_01cf_e16c_721cfee57870'
+    - '#/components/responses/n8dfb4061_b322_0129_1c89_3970bde7d77f'
+    - '#/components/responses/n90d2a14e_0ee3_0111_fc0e_e5dc9b0a2479'
+    - '#/components/responses/n9b8239eb_f07c_01be_e6ea_ce75d6e8b118'
+    - '#/components/responses/n9cf8c266_30ae_01b1_2240_e2b1df415ba8'
+    - '#/components/responses/n9e91822a_545b_0198_56e3_91a622fe7b29'
+    - '#/components/responses/n9e9f525f_9799_0122_7010_eed268872d97'
+    - '#/components/responses/n9fa20c4c_e6fe_0108_8ef4_a5c82ccc82aa'
+    - '#/components/requestBodies/a57f908d_1f5e_011c_49b4_0d0bad3a8893'
+    - '#/components/requestBodies/a951901e_aad5_0198_fbd9_1e7ffe981ce1'
+    - '#/components/requestBodies/a9e3ef52_2491_01cc_39b8_cfacf38761e1'
+    - '#/components/requestBodies/c9ca68b6_62cf_011f_a03f_ff28977ee8e3'
+    - '#/components/requestBodies/e8db298c_d3ec_0115_da0b_da8b30c34112'
+    - '#/components/requestBodies/ea9df52f_b6a9_0123_920f_e12f2efb0967'
+    - '#/components/requestBodies/ec5d1a0d_4424_015d_69a4_34188cd3a5b1'
+    - '#/components/requestBodies/f9c0fb15_9180_014c_19d6_0b984adadad7'
+    - '#/components/requestBodies/n055c4b71_c780_010d_bc85_17b67232bd16'
+    - '#/components/requestBodies/n0579515f_6659_01cb_cb23_d5ddad51ae82'
+    - '#/components/requestBodies/n084f9711_e426_01d9_949f_43f97ca14523'
+    - '#/components/requestBodies/n0bdec4f3_d69f_0101_6a07_d1f2047efe49'
+    - '#/components/requestBodies/n1271b5e9_82c1_0152_4cf0_08aee3d6f5d2'
+    - '#/components/requestBodies/n172a15a6_51d9_0142_1b32_faf927b4fd32'
+    - '#/components/requestBodies/n17e393cd_b4e1_014e_c779_7313ee91358e'
+    - '#/components/requestBodies/n22498e26_376b_0171_c488_34067c4b7a50'
+    - '#/components/requestBodies/n2470fae6_2133_0111_36d8_652afe065a6a'
+    - '#/components/requestBodies/n2ea50cf9_6cf3_01c4_e830_a10fe0346232'
+    - '#/components/requestBodies/n3489e2cf_1720_0137_f619_0ddd7d1f9edb'
+    - '#/components/requestBodies/n4395f117_9d0a_0117_6e7f_895d7a0c9dc3'
+    - '#/components/requestBodies/n4731d222_a2ad_01ca_f655_72829996de9a'
+    - '#/components/requestBodies/n4ac5ee3b_8764_01cd_6c57_659fb8475ade'
+    - '#/components/requestBodies/n4e79b308_90e3_0103_5a65_3606f5e1f206'
+    - '#/components/requestBodies/n543198de_cee0_01e0_999a_4982f1210542'
+    - '#/components/requestBodies/n64f113a0_959c_01cc_2405_ca06c13c92ff'
+    - '#/components/requestBodies/n7402c2b8_6a39_011c_647d_b0aa604cafc0'
+    - '#/components/requestBodies/n7746e58a_d2be_01e5_cf0b_5ade2934e237'
+    - '#/components/requestBodies/n8c2a403f_5d85_0177_46d5_95ad62d48481'
+    - '#/components/requestBodies/n8cfb03b0_6def_012f_3975_b88ea79ceedc'
+    - '#/components/requestBodies/n9e7b9c38_5336_015b_38f8_ffdbafe7be7f'
+learn/reference/delivery_api.json:
+  spec:
+    - '#/components/parameters/element_codename'
+    - '#/components/parameters/item_codename'
+    - '#/components/parameters/taxonomy_group_codename'
+    - '#/components/parameters/type_codename'
+    - '#/components/parameters/x_continuation'
+    - '#/components/parameters/x_request_charge'
+  no-invalid-media-type-examples:
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/0/elements/title/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/0/elements/title
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/0/elements/author/value/0
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/0/elements/author/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/0/elements/author
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/0/elements/url/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/0/elements/url
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/1/elements/title/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/1/elements/title
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/1/elements/author/value/0
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/1/elements/author/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/1/elements/author
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/1/elements/url/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/1/elements/url
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/2/elements/title/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/2/elements/title
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/2/elements/author/value/0
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/2/elements/author/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/items/2/elements/author
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/modular_content/n43768251_0eaa_01f6_69c2_f93047f076e1/elements/tweet_link/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/modular_content/n43768251_0eaa_01f6_69c2_f93047f076e1/elements/tweet_link
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/modular_content/n499599bf_6bda_019e_d2f7_debd4589f3b8/elements/code/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/modular_content/n499599bf_6bda_019e_d2f7_debd4589f3b8/elements/code
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/modular_content/n78ee300e_7a58_0117_819e_529b2294067b/elements/quote/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/modular_content/n78ee300e_7a58_0117_819e_529b2294067b/elements/quote
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/modular_content/n78ee300e_7a58_0117_819e_529b2294067b/elements/source/value
+    - >-
+      #/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe/content/application~1json/example/modular_content/n78ee300e_7a58_0117_819e_529b2294067b/elements/source
+    - >-
+      #/components/responses/n339b3205_89a4_0143_70ca_da67989d0403/content/application~1json/schema
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/title/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/title
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/related_articles/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/related_articles/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/related_articles
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/author/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/author/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/author
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/url/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/url
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/title/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/title
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/url/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/url
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/subitems/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/subitems/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/subitems
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/title/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/title
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/related_articles/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/related_articles/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/related_articles
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/author/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/author/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/author
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/url/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/url
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/jenny_brown/elements/name/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/jenny_brown/elements/name
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/title/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/title
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/related_articles/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/related_articles/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/related_articles
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/author/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/author/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/author
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/url/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/url
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/n43768251_0eaa_01f6_69c2_f93047f076e1/elements/tweet_link/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/n43768251_0eaa_01f6_69c2_f93047f076e1/elements/tweet_link
+    - >-
+      #/components/responses/n375c7b1f_c0f8_0198_8631_370646046f3e/content/application~1json/schema
+  no-unused-components:
+    - '#/components/parameters/depth'
+    - '#/components/parameters/element_codename'
+    - '#/components/parameters/elements'
+    - '#/components/parameters/includetotalcount'
+    - '#/components/parameters/item_codename'
+    - '#/components/parameters/language'
+    - '#/components/parameters/limit_8cd54e2'
+    - '#/components/parameters/order'
+    - '#/components/parameters/project_id'
+    - '#/components/parameters/skip'
+    - '#/components/parameters/taxonomy_group_codename'
+    - '#/components/parameters/type_codename'
+    - '#/components/parameters/x_continuation'
+    - '#/components/parameters/x_kc_wait_for_loading_new_content'
+    - '#/components/parameters/x_request_charge'
+    - '#/components/schemas/a5baa42f_da12_01bc_2bed_b464d11409d8'
+    - '#/components/responses/a207c92d_83d2_01f0_e997_542ed4a38f60'
+    - '#/components/responses/aa05497b_b482_012a_0a83_b1dadc71927e'
+    - '#/components/responses/cbbfafa2_1ce3_0116_6ac7_d69a0268f4a9'
+    - '#/components/responses/cc356a6b_4819_017a_cd66_b9a475ffb6c8'
+    - '#/components/responses/fd944755_616c_0119_e7f3_2ea4992a8ce0'
+    - '#/components/responses/n01f6c4b3_fc65_0183_869e_c2d681c6dd90'
+    - '#/components/responses/n1a689c94_2fa9_01da_e955_6f3b17a97ebe'
+    - '#/components/responses/n1ea2894a_a72c_017e_d385_94389abd9406'
+    - '#/components/responses/n339b3205_89a4_0143_70ca_da67989d0403'
+    - '#/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e'
+    - '#/components/responses/n375c7b1f_c0f8_0198_8631_370646046f3e'
+    - '#/components/responses/n80b37bfd_c599_0122_8120_86e1683f1fa7'
+    - '#/components/responses/n8c366ba7_f32a_0149_88a3_959aec14b010'
+learn/reference/prototype_api.json:
+  no-invalid-media-type-examples:
+    - >-
+      #/components/requestBodies/n17e393cd_b4e1_014e_c779_7313ee91358e/content/application~1json/schema
+    - >-
+      #/components/responses/af723c1c_9ebc_01b1_e5af_ce89f39d9b31/content/application~1json/schema
+    - >-
+      #/components/responses/n862f6431_45ae_016a_1f26_99a5bad3b079/content/application~1json/example
+    - >-
+      #/components/responses/dfc219f7_dfa6_01c5_0fd7_be75d678fe18/content/application~1json/example
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/title/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/title
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/related_articles/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/related_articles/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/related_articles
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/author/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/author/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/author
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/url/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/0/elements/url
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/title/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/title
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/url/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/url
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/subitems/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/subitems/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/items/1/elements/subitems
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/title/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/title
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/related_articles/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/related_articles/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/related_articles
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/author/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/author/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/author
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/url/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/about_us/elements/url
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/jenny_brown/elements/name/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/jenny_brown/elements/name
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/title/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/title
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/related_articles/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/related_articles/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/related_articles
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/author/value/0
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/author/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/author
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/url/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/my_article/elements/url
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/n43768251_0eaa_01f6_69c2_f93047f076e1/elements/tweet_link/value
+    - >-
+      #/components/responses/n3657a2bd_15c0_01c4_e2fc_6795dbebd64e/content/application~1json/example/modular_content/n43768251_0eaa_01f6_69c2_f93047f076e1/elements/tweet_link
+    - >-
+      #/components/requestBodies/n1271b5e9_82c1_0152_4cf0_08aee3d6f5d2/content/application~1json/schema
+    - >-
+      #/components/responses/n3f40a0ba_ab35_012f_73a5_f4c28b1c5686/content/application~1json/schema
+    - >-
+      #/components/responses/n7597d5e0_3424_014e_5818_cb8cafb87b8e/content/application~1json/example
+    - >-
+      #/components/responses/n2557a072_937d_01e7_d7cb_87ca83ab5dad/content/application~1json/example
+    - >-
+      #/components/responses/n251b25ab_2a43_0130_0355_50402630160a/content/application~1json/example
+    - >-
+      #/components/responses/n8af8ae5c_a7ab_01f1_1e2b_da376d932104/content/application~1json/example
+  operation-4xx-response:
+    - '#/paths/~1{project_id}~1items/get/responses'
+  no-unused-components:
+    - '#/components/schemas/a5baa42f_da12_01bc_2bed_b464d11409d8'
+    - '#/components/responses/n251b25ab_2a43_0130_0355_50402630160a'
+    - '#/components/responses/n8af8ae5c_a7ab_01f1_1e2b_da376d932104'
