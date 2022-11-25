@@ -21,9 +21,9 @@ export const theme = {
       // contrastText: ({ colors }) => readableColor(colors.primary.main),
     },
     secondary: {
-      contrastText: "#231F20",
-      light: "#f3f3f3",
-      main: "transparent",
+      contrastText: '#231F20',
+      light: '#f3f3f3',
+      //main: 'transparent',
     },
     success: {
        main: '#36A284',
@@ -50,16 +50,16 @@ export const theme = {
     //   contrastText: ({ colors }) => readableColor(colors.info.main),
     },
     text: {
-      light: "#231F20",
-      primary: "#231F20",
-      secondary: "#231F20",
+      //light: '#231F20',
+      primary: '#231F20',
+      secondary: '#231F20',
     },
     border: {
       dark: 'transparent',
       light: '#e8e8e8',
     },
     accent: {
-      dark: "#3195a6"
+      dark: '#3195a6'
     },
     responses: {
       success: {
@@ -178,7 +178,7 @@ export const theme = {
     },
   },
   rightPanel: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'red',
     width: '40%',
     textColor: '#231F20',
   },
@@ -196,35 +196,35 @@ export const theme = {
    },
    components: {
     buttons: {
-      borderRadius: "26px",
-      hoverStyle: "background-color:#231F20;color:#fff",
-      fontWeight: "700",
-      boxShadow: "none",
-      hoverBoxShadow: "none",
+      borderRadius: '26px',
+      hoverStyle: 'background-color:#231F20;color:#fff',
+      fontWeight: '700',
+      boxShadow: 'none',
+      hoverBoxShadow: 'none',
     },
     httpBadges: {
-      color: "#fff",
-      fontFamily: "Work Sans, sans-serif",
-      fontWeight: "400",
+      color: '#fff',
+      fontFamily: 'Work Sans, sans-serif',
+      fontWeight: '400',
       sizes: {
         small: {
-          fontSize: "10px",
-          lineHeight: "1.75em",
+          fontSize: '10px',
+          lineHeight: '1.75em',
         },
         medium: {
-          fontSize: "14px",
-          lineHeight: "1.75em"
+          fontSize: '14px',
+          lineHeight: '1.75em'
         }
       }
     },
     panels: {
-      backgroundColor: "transprent",
-      borderRadius: "24px 24px 8px 24px",
+      backgroundColor: 'transprent',
+      borderRadius: '24px 24px 8px 24px',
     }
   },
   overrides: {
     DownloadButton: {
-      custom: "padding: 12px 32px;font-size: 16px;box-shadow: 0 0 0 2px #231f20;"
+      custom: 'padding: 12px 32px;font-size: 16px;box-shadow: 0 0 0 2px #231f20;'
     }
   }
 };
