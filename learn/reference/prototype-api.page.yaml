@@ -1,0 +1,18 @@
+type: reference-docs
+definitionId: prototypeApi
+settings:
+  pagination: none
+  hideDownloadButton: false
+  markdownHeadingsAnchorLevel: 4
+  hideTryItPanel: true
+  disableSearch: true
+  expandSingleSchemaField: true
+  hideSchemaTitles: true
+  hideSingleRequestSampleTab: true
+  jsonSampleExpandLevel: 5
+  pathInMiddlePanel: true
+  requiredPropsFirst: false
+  simpleOneOfTypeLabel: true
+  sortPropsAlphabetically: false
+  showChangeLayoutButton: false
+  showRightPanelToggle: false
