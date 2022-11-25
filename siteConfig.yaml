@@ -19,7 +19,7 @@ oasDefinitions:
   # add links to definitions in our API registry by using a fully qualified URL.
 stylesheets:
   - https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap
-  - ./static/assets/css/app.min.css
+  #- ./static/assets/css/app.min.css
 #analytics:
 # ga:
 # note that GA doesn't work in the development environment
