@@ -9,7 +9,7 @@ linkChecker:
   options:
     CheckExternal: false
 logo:
-  image: ./images/logo.png
+  image: images/logo.png
   altText: Redocly Training
 toc:
   enable: true
@@ -19,7 +19,7 @@ oasDefinitions:
   # add links to definitions in our API registry by using a fully qualified URL.
 stylesheets:
   - https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap
-  #- ./static/assets/css/app.min.css
+  - ./static/assets/css/app.min.css
 #analytics:
 # ga:
 # note that GA doesn't work in the development environment
@@ -28,7 +28,7 @@ stylesheets:
 #  - ./static/intercom.js
 nav:
   - label: External docs
-    icon: ./images/redocly-icon-white.png
+    icon: images/redocly-icon-white.png
     href: https://redoc.ly/docs/developer-portal/introduction/
 
   - search: true

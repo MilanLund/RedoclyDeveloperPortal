@@ -219,12 +219,12 @@ export const theme = {
     },
     panels: {
       backgroundColor: 'transprent',
-      borderRadius: '24px 24px 8px 24px',
+      borderRadius: '24px',
     }
   },
   overrides: {
     DownloadButton: {
-      custom: 'padding: 12px 32px;font-size: 16px;box-shadow: 0 0 0 2px #231f20;'
+      custom: 'padding: 12px 32px;font-size: 16px;box-shadow: 0 0 0 2px #231f20;background-color: #fff;display: inline-block;'
     }
   }
 };
